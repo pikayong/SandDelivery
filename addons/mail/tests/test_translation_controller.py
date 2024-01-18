@@ -5,8 +5,7 @@ import requests
 from http import HTTPStatus
 from unittest.mock import patch
 
-from odoo.addons.base.tests.common import HttpCaseWithUserDemo
-from odoo.tests.common import JsonRpcException, new_test_user, tagged
+from odoo.tests.common import HttpCase, JsonRpcException, new_test_user, tagged
 from odoo.tools import mute_logger
 
 SAMPLE = {
@@ -38,7 +37,7 @@ def mock_response(fun):
 
 # Google Cloud Translation Documentation: https://cloud.google.com/translate/docs/reference/api-overview?hl=en
 @tagged("post_install", "-at_install")
-class TestTranslationController(HttpCaseWithUserDemo):
+class TestTranslationController(HttpCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

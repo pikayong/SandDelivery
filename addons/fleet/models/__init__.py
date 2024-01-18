@@ -10,6 +10,7 @@ from . import fleet_vehicle_model
 from . import fleet_vehicle_model_brand
 from . import fleet_vehicle_model_category
 from . import fleet_vehicle_odometer
+from . import fleet_vehicle_petrol
 from . import fleet_vehicle_state
 from . import fleet_vehicle_tag
 from . import res_config_settings

@@ -375,7 +375,7 @@
 
     <menuitem name="Fleet" parent="menu_root" id="fleet_vehicles" sequence="2" groups="fleet_group_user"/>
     <menuitem action="fleet_vehicle_action" parent="fleet_vehicles" name="Fleet"
-        id="fleet_vehicle_menu" groups="fleet_group_user" sequence="0"/>
+        id="fleet_vehicle_menu" groups="fleet_group_user" sequence="10"/>
 
    <record id='fleet_vehicle_odometer_view_form' model='ir.ui.view'>
         <field name="name">fleet.vehicle.odometer.form</field>
@@ -391,7 +391,7 @@
                                 <field name="value" class="oe_inline"/>
                                 <field name="unit" class="ms-2"/>
                             </div>
-                            <field name="date"/>
+                            <field name="datetime"/>
                         </group>
                     </group>
                 </sheet>
@@ -404,11 +404,19 @@
         <field name="model">fleet.vehicle.odometer</field>
         <field name="arch" type="xml">
             <tree string="Odometer Logs" editable="top">
-                <field name="date" />
+                <header>
+                    <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
+                </header>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" />
+                <field name="datetime" />
                 <field name="vehicle_id" widget="many2one_avatar"/>
                 <field name="driver_id" widget="many2one_avatar"/>
-                <field name="value" />
-                <field name="unit" />
+                <field name="odometer_start" />
+                <field name="odometer_end" />
+                <field name="bucket_amount" />
+                <field name="loading_weight" />
+                <field name="total" />
             </tree>
         </field>
     </record>
@@ -424,7 +432,7 @@
                             <div>
                                 <strong>
                                     <field name="vehicle_id"/>
-                                    <span class="float-end"><field name="date"/></span>
+                                    <span class="float-end"><field name="datetime"/></span>
                                 </strong>
                             </div>
                             <div>
@@ -446,7 +454,7 @@
                 <field name="vehicle_id"/>
                 <field name="driver_id"/>
                 <field name="value"/>
-                <field name="date"/>
+                <field name="datetime"/>
                 <group expand="0" string="Group By">
                     <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
                 </group>
@@ -479,7 +487,7 @@
         </field>
     </record>
 
-    <menuitem action="fleet_vehicle_odometer_action" parent="fleet_vehicles" id="fleet_vehicle_odometer_menu" groups="fleet_group_user" sequence="10"/>
+    <menuitem action="fleet_vehicle_odometer_action" parent="fleet_vehicles" id="fleet_vehicle_odometer_menu" groups="fleet_group_user" sequence="0"/>
 
     <record id='fleet_vehicle_service_types_view_tree' model='ir.ui.view'>
         <field name="name">fleet.service.type.tree</field>
@@ -518,9 +526,9 @@
           </p>
         </field>
     </record>
-    <menuitem name="Services" parent="fleet_configuration" id="fleet_services_configuration" sequence="20" groups="base.group_no_one"/>
+    <menuitem name="Services" parent="fleet_configuration" id="fleet_services_configuration" sequence="20" groups="base.group_no_one" active="False"/>
     <menuitem action="fleet_vehicle_service_types_action" parent="fleet_services_configuration" name="Types"
-        id="fleet_vehicle_service_types_menu" sequence="1" groups="base.group_no_one"/>
+        id="fleet_vehicle_service_types_menu" sequence="1" groups="base.group_no_one" active="False"/>
 
     <record id='fleet_vehicle_state_view_tree' model='ir.ui.view'>
         <field name="name">fleet.vehicle.state.tree</field>
@@ -547,8 +555,8 @@
         </field>
     </record>
 
-    <menuitem name="Vehicle" parent="fleet_configuration" id="fleet_vehicles_configuration" sequence="30" groups="base.group_no_one"/>
-    <menuitem action="fleet_vehicle_state_action" parent="fleet_vehicles_configuration" id="fleet_vehicle_state_menu" sequence="10" groups="base.group_no_one"/>
+    <menuitem name="Vehicle" parent="fleet_configuration" id="fleet_vehicles_configuration" sequence="30" groups="base.group_no_one" active="False"/>
+    <menuitem action="fleet_vehicle_state_action" parent="fleet_vehicles_configuration" id="fleet_vehicle_state_menu" sequence="10" groups="base.group_no_one" active="False"/>
 
     <record id="fleet_vehicle_tag_view_view_form" model="ir.ui.view">
         <field name="name">fleet.vehicle.tag.form</field>
@@ -585,7 +593,7 @@
         </field>
     </record>
 
-    <menuitem id="fleet_vehicle_tag_menu" parent="fleet_vehicles_configuration" action="fleet_vehicle_tag_action" sequence="20" groups="base.group_no_one"/>
+    <menuitem id="fleet_vehicle_tag_menu" parent="fleet_vehicles_configuration" action="fleet_vehicle_tag_action" sequence="20" groups="base.group_no_one" active="False"/>
 
     <record id="fleet_vehicle_assignation_log_view_list" model="ir.ui.view">
         <field name="name">fleet.vehicle.assignation.log.view.tree</field>
@@ -599,5 +607,113 @@
             </tree>
         </field>
     </record>
+
+    <record id='fleet_vehicle_petrol_view_form' model='ir.ui.view'>
+        <field name="name">fleet.vehicle.petrol.form</field>
+        <field name="model">fleet.vehicle.petrol</field>
+        <field name="arch" type="xml">
+            <form string="Petrol Logs">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="odometer"/>
+                            <field name="petrol"/>
+                            <field name="datetime"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id='fleet_vehicle_petrol_view_tree' model='ir.ui.view'>
+        <field name="name">fleet.vehicle.petrol.tree</field>
+        <field name="model">fleet.vehicle.petrol</field>
+        <field name="arch" type="xml">
+            <tree string="Petrol Logs" editable="top">
+                <header>
+                    <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
+                </header>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" />
+                <field name="datetime" />
+                <field name="vehicle_id" widget="many2one_avatar"/>
+                <field name="driver_id" widget="many2one_avatar"/>
+                <field name="odometer" />
+                <field name="petrol" />
+            </tree>
+        </field>
+    </record>
+
+    <record id='fleet_vehicle_petrol_view_kanban' model='ir.ui.view'>
+        <field name="name">fleet.vehicle.petrol.kanban</field>
+        <field name="model">fleet.vehicle.petrol</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div>
+                                <strong>
+                                    <field name="vehicle_id"/>
+                                    <span class="float-end"><field name="datetime"/></span>
+                                </strong>
+                            </div>
+                            <div>
+                                <span><field name="driver_id"/></span>
+                                <span class="float-end"><field name="odometer"/> km</span>
+                                <span class="float-end">RM<field name="petrol"/></span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id='fleet_vehicle_petrol_view_search' model='ir.ui.view'>
+        <field name="name">fleet.vehicle.petrol.search</field>
+        <field name="model">fleet.vehicle.petrol</field>
+        <field name="arch" type="xml">
+            <search string="Vehicles petrols" >
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="odometer"/>
+                <field name="petrol"/>
+                <field name="datetime"/>
+                <group expand="0" string="Group By">
+                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="fleet_vehicle_petrol_view_graph" model="ir.ui.view">
+       <field name="name">fleet.vehicle.petrol.graph</field>
+       <field name="model">fleet.vehicle.petrol</field>
+       <field name="arch" type="xml">
+            <graph string="Petrol Values Per Vehicle" sample="1">
+                <field name="vehicle_id"/>
+                <field name="petrol" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id='fleet_vehicle_petrol_action' model='ir.actions.act_window'>
+        <field name="name">Petrols</field>
+        <field name="res_model">fleet.vehicle.petrol</field>
+        <field name="view_mode">tree,kanban,form,graph</field>
+        <field name="context"></field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new petrol log
+          </p><p>
+            You can add various petrol entries for all vehicles.
+          </p>
+        </field>
+    </record>
+
+    <menuitem action="fleet_vehicle_petrol_action" parent="fleet_vehicles" id="fleet_vehicle_petrol_menu" groups="fleet_group_user" sequence="11"/>
 
 </odoo>

@@ -5,7 +5,8 @@
         action="action_discuss"
         web_icon="mail,static/description/icon.png"
         groups="base.group_user"
-        sequence="5"
+        sequence="220"
+        active="False"
     />
 
     <record id="base.menu_email" model="ir.ui.menu">

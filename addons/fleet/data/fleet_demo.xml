@@ -493,169 +493,169 @@
 
       <record id="log_odometer_1" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=336)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=336))" />
           <field name="value">0</field>
       </record>
 
       <record id="log_odometer_2" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=304)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=304))" />
           <field name="value">658</field>
       </record>
 
       <record id="log_odometer_3" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=289)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=289))" />
           <field name="value">1360</field>
       </record>
 
       <record id="log_odometer_4" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=260)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=260))" />
           <field name="value">2044</field>
       </record>
 
       <record id="log_odometer_5" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=230)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=230))" />
           <field name="value">2756</field>
       </record>
 
       <record id="log_odometer_6" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=185)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=185))" />
           <field name="value">3410</field>
       </record>
 
       <record id="log_odometer_7" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=165)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=165))" />
           <field name="value">3750</field>
       </record>
 
       <record id="log_odometer_8" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=140)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=140))" />
           <field name="value">4115</field>
       </record>
 
       <record id="log_odometer_9" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=120)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=120))" />
           <field name="value">4750</field>
       </record>
 
       <record id="log_odometer_10" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=105)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=105))" />
           <field name="value">5171</field>
       </record>
 
       <record id="log_odometer_11" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=85)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=85))" />
           <field name="value">5873</field>
       </record>
 
       <record id="log_odometer_12" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=55)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=55))" />
           <field name="value">6571</field>
       </record>
 
       <record id="log_odometer_13" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=32)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=32))" />
           <field name="value">7954</field>
       </record>
 
       <record id="log_odometer_14" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_1" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=2))" />
           <field name="value">7981</field>
       </record>
 
       <record id="log_odometer_15" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=233)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=233))" />
           <field name="value">0</field>
       </record>
 
       <record id="log_odometer_16" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=233)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=233))" />
           <field name="value">702</field>
       </record>
 
       <record id="log_odometer_17" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=215)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=215))" />
           <field name="value">1205.4</field>
       </record>
 
       <record id="log_odometer_18" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=200)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=200))" />
           <field name="value">2122</field>
       </record>
 
       <record id="log_odometer_19" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=180)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=180))" />
           <field name="value">2430</field>
       </record>
 
       <record id="log_odometer_20" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=165)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=165))" />
           <field name="value">3015</field>
       </record>
 
       <record id="log_odometer_21" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=150)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=150))" />
           <field name="value">3602.1</field>
       </record>
 
       <record id="log_odometer_22" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=124)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=124))" />
           <field name="value">4205.5</field>
       </record>
 
       <record id="log_odometer_23" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=96)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=96))" />
           <field name="value">4935</field>
       </record>
 
       <record id="log_odometer_24" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=80)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=80))" />
           <field name="value">5555</field>
       </record>
 
       <record id="log_odometer_25" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=55)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=55))" />
           <field name="value">5987</field>
       </record>
 
       <record id="log_odometer_26" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=45)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=45))" />
           <field name="value">6571</field>
       </record>
 
       <record id="log_odometer_27" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=30))" />
           <field name="value">7201.5</field>
       </record>
 
       <record id="log_odometer_28" model="fleet.vehicle.odometer">
           <field name="vehicle_id" ref="vehicle_2" />
-          <field name="date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')" />
+          <field name="datetime" eval="(DateTime.now() - timedelta(days=10))" />
           <field name="value">8001.2</field>
       </record>
 

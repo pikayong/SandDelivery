@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
+import logging
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, _
@@ -23,6 +24,7 @@ class FleetVehicle(models.Model):
     _description = 'Vehicle'
     _order = 'license_plate asc, acquisition_date asc'
     _rec_names_search = ['name', 'driver_id.name']
+    _logger = logging.getLogger(__name__)
 
     def _get_default_state(self):
         state = self.env.ref('fleet.fleet_vehicle_state_new_request', raise_if_not_found=False)
@@ -119,6 +121,7 @@ class FleetVehicle(models.Model):
         ('today', 'Today'),
     ], compute='_compute_service_activity')
     vehicle_properties = fields.Properties('Properties', definition='model_id.vehicle_properties_definition', copy=True)
+    synced = fields.Integer('Synced')
 
     @api.depends('log_services')
     def _compute_service_activity(self):
@@ -159,8 +162,8 @@ class FleetVehicle(models.Model):
     def _set_odometer(self):
         for record in self:
             if record.odometer:
-                date = fields.Date.context_today(record)
-                data = {'value': record.odometer, 'date': date, 'vehicle_id': record.id}
+                datetime = fields.Datetime.context_timestamp(record)
+                data = {'value': record.odometer, 'datetime': datetime, 'vehicle_id': record.id}
                 self.env['fleet.vehicle.odometer'].create(data)
 
     def _compute_count_all(self):
@@ -287,7 +290,11 @@ class FleetVehicle(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        self._logger.info('here!!')
+        self._logger.info(vals_list)
         ptc_values = [self._clean_vals_internal_user(vals) for vals in vals_list]
+        self._logger.info(vals_list)
+        self._logger.info(ptc_values)
         vehicles = super().create(vals_list)
         for vehicle, vals, ptc_value in zip(vehicles, vals_list, ptc_values):
             if ptc_value:
@@ -330,9 +337,14 @@ class FleetVehicle(models.Model):
             self.env['fleet.vehicle.log.contract'].search([('vehicle_id', 'in', self.ids)]).active = False
             self.env['fleet.vehicle.log.services'].search([('vehicle_id', 'in', self.ids)]).active = False
 
+        if self.synced == 1:
+            vals['synced'] = 2
+
         su_vals = self._clean_vals_internal_user(vals)
         if su_vals:
             self.sudo().write(su_vals)
+        self._logger.info('-v---self---v-')
+        self._logger.info(self)
         res = super(FleetVehicle, self).write(vals)
         return res
 
@@ -412,3 +424,8 @@ class FleetVehicle(models.Model):
             'domain': [('vehicle_id', '=', self.id)],
             'context': {'default_driver_id': self.driver_id.id, 'default_vehicle_id': self.id}
         }
+
+    def quick_sync(self):
+        
+        self.env['api_controller.api_controller'].quick_sync()
+        return True

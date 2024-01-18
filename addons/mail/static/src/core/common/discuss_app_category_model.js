@@ -1,6 +1,5 @@
 /* @odoo-module */
 
-import { compareDatetime } from "@mail/utils/common/misc";
 import { Record } from "./record";
 
 export class DiscussAppCategory extends Record {
@@ -23,9 +22,7 @@ export class DiscussAppCategory extends Record {
             return String.prototype.localeCompare.call(t1.name, t2.name);
         }
         if (this.id === "chats") {
-            return (
-                compareDatetime(t2.lastInterestDateTime, t1.lastInterestDateTime) || t2.id - t1.id
-            );
+            return t2.lastInterestDateTime.ts - t1.lastInterestDateTime.ts;
         }
     }
 

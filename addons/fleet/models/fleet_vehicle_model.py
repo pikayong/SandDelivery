@@ -45,6 +45,7 @@ class FleetVehicleModel(models.Model):
     horsepower_tax = fields.Float('Horsepower Taxation')
     electric_assistance = fields.Boolean(default=False)
     vehicle_properties_definition = fields.PropertiesDefinition('Vehicle Properties')
+    synced = fields.Integer('Synced')
 
     @api.model
     def _name_search(self, name, domain=None, operator='ilike', limit=None, order=None):
@@ -96,3 +97,11 @@ class FleetVehicleModel(models.Model):
         }
 
         return view
+    
+    def write(self, vals):
+        if self.synced == 1:
+            vals['synced'] = 2
+
+        res = super(FleetVehicleModel, self).write(vals)
+        # here you can do accordingly
+        return res

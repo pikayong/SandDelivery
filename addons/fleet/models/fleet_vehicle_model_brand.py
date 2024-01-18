@@ -14,6 +14,7 @@ class FleetVehicleModelBrand(models.Model):
     image_128 = fields.Image("Logo", max_width=128, max_height=128)
     model_count = fields.Integer(compute="_compute_model_count", string="", store=True)
     model_ids = fields.One2many('fleet.vehicle.model', 'brand_id')
+    synced = fields.Integer('Synced')
 
     @api.depends('model_ids')
     def _compute_model_count(self):

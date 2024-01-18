@@ -1,7 +1,6 @@
 /* @odoo-module */
 
 import { startServer } from "@bus/../tests/helpers/mock_python_environment";
-import { waitUntilSubscribe } from "@bus/../tests/helpers/websocket_event_deferred";
 
 import { start } from "@mail/../tests/helpers/test_utils";
 
@@ -114,12 +113,17 @@ QUnit.test("Channel subscription is renewed when channel is added from invite", 
 QUnit.test("Channel subscription is renewed when channel is left", async (assert) => {
     const pyEnv = await startServer();
     pyEnv["discuss.channel"].create({ name: "Sales" });
-    const { openDiscuss } = await start();
-    await waitUntilSubscribe();
+    const { env, openDiscuss } = await start();
+    patchWithCleanup(env.services["bus_service"], {
+        forceUpdateChannels() {
+            assert.step("update-channels");
+        },
+    });
     openDiscuss();
     await click(".o-mail-DiscussSidebarChannel .btn[title='Leave this channel']");
     await contains(".o-mail-DiscussSidebarChannel", { count: 0 });
-    await waitUntilSubscribe();
+    await new Promise((resolve) => setTimeout(resolve)); // update of channels is debounced
+    assert.verifySteps(["update-channels"]);
 });
 
 QUnit.test("Adding attachments", async () => {

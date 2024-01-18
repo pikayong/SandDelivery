@@ -15,3 +15,4 @@ class FleetVehicleModelCategory(models.Model):
 
     name = fields.Char(required=True)
     sequence = fields.Integer()
+    synced = fields.Integer('Synced')

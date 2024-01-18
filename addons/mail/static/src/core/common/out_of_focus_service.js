@@ -18,14 +18,16 @@ export class OutOfFocusService {
      * @param {Partial<import("services").Services>} services
      */
     constructor(env, services) {
-        this.setup(env, services);
-    }
-
-    setup(env, services) {
         this.env = env;
         this.audio = undefined;
+        this.counter = 0;
         this.multiTab = services.multi_tab;
         this.notificationService = services.notification;
+        this.titleService = services.title;
+        env.bus.addEventListener("window_focus", () => {
+            this.counter = 0;
+            this.titleService.setParts({ _chat: undefined });
+        });
     }
 
     async notify(message, channel) {
@@ -58,6 +60,10 @@ export class OutOfFocusService {
             message: notificationContent,
             title: notificationTitle,
             type: "info",
+        });
+        this.counter++;
+        this.titleService.setParts({
+            _chat: this.counter === 1 ? _t("1 Message") : _t("%s Messages", this.counter),
         });
     }
 
@@ -159,7 +165,7 @@ export class OutOfFocusService {
 }
 
 export const outOfFocusService = {
-    dependencies: ["multi_tab", "notification"],
+    dependencies: ["multi_tab", "notification", "title"],
     /**
      * @param {import("@web/env").OdooEnv} env
      * @param {Partial<import("services").Services>} services

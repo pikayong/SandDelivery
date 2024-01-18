@@ -51,7 +51,7 @@ class FleetVehicleLogServices(models.Model):
                 raise UserError(_('Emptying the odometer value of a vehicle is not allowed.'))
             odometer = self.env['fleet.vehicle.odometer'].create({
                 'value': record.odometer,
-                'date': record.date or fields.Date.context_today(record),
+                'datetime': record.date or fields.Datetime.context_timestamp(record),
                 'vehicle_id': record.vehicle_id.id
             })
             self.odometer_id = odometer
