@@ -33,7 +33,7 @@ class FleetVehiclePetrol(models.Model):
         _logger = logging.getLogger(__name__)
         for record in self:
             record.petrol_rate = 0
-            filtered_self = filter(lambda x: x.datetime < record.datetime and x.vehicle_id == record.vehicle_id, self)
+            filtered_self = list(filter(lambda x: x.datetime < record.datetime and x.vehicle_id == record.vehicle_id, self))
             _logger.info(record.datetime)
             _logger.info('filtered_self')
             _logger.info(filtered_self)
