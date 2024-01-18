@@ -18,6 +18,7 @@ class FleetVehiclePetrol(models.Model):
     driver_id = fields.Many2one(related="vehicle_id.driver_id", string="Driver", readonly=False)
     synced = fields.Integer('Synced')
     synced_display = fields.Char(compute='_get_sync_display', store=False)
+    petrol_rate = fields.Float('Petrol Rate', compute='_get_petrol_rate', store=False)
 
     @api.depends('synced')
     def _get_sync_display(self):
@@ -26,6 +27,22 @@ class FleetVehiclePetrol(models.Model):
             if record.synced == 0:
                 synced = 'Not Synced'
             record.synced_display = synced
+
+    @api.depends('petrol', 'odometer', 'datetime', 'vehicle_id')
+    def _get_petrol_rate(self):
+        _logger = logging.getLogger(__name__)
+        for record in self:
+            record.petrol_rate = 0
+            filtered_self = filter(lambda x: x.datetime < record.datetime and x.vehicle_id == record.vehicle_id, self)
+            _logger.info(record.datetime)
+            _logger.info('filtered_self')
+            _logger.info(filtered_self)
+            if (len(filtered_self) > 0):
+                max_date = max(map(lambda y: y.datetime, filtered_self))
+                odometer_diff = record.odometer - list(filter(lambda z: z.datetime == max_date, filtered_self))[0].odometer
+                if odometer_diff > 0:
+                    record.petrol_rate = record.petrol / odometer_diff
+            
 
 
     @api.depends('vehicle_id', 'datetime')

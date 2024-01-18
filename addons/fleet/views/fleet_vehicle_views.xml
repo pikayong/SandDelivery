@@ -404,9 +404,9 @@
         <field name="model">fleet.vehicle.odometer</field>
         <field name="arch" type="xml">
             <tree string="Odometer Logs" editable="top">
-                <header>
+                <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
-                </header>
+                </header> -->
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" />
                 <field name="datetime" />
@@ -632,9 +632,9 @@
         <field name="model">fleet.vehicle.petrol</field>
         <field name="arch" type="xml">
             <tree string="Petrol Logs" editable="top">
-                <header>
+                <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
-                </header>
+                </header> -->
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" />
                 <field name="datetime" />
