@@ -27,8 +27,12 @@ class FleetVehicle(models.Model):
     _logger = logging.getLogger(__name__)
 
     def _get_default_state(self):
-        state = self.env.ref('fleet.fleet_vehicle_state_new_request', raise_if_not_found=False)
-        return state if state and state.id else False
+        # state = self.env.ref('fleet.fleet_vehicle_state_new_request', raise_if_not_found=False)
+        # return state if state and state.id else False
+        activeState = self.env['fleet.vehicle.state'].search([('id', '=', '1')])
+        self._logger.info(activeState)
+        return activeState if activeState and activeState.id else False
+
 
     name = fields.Char(compute="_compute_vehicle_name", store=True)
     description = fields.Html("Vehicle Description")

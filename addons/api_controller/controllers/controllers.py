@@ -75,7 +75,7 @@ class ApiController(http.Controller):
             existingDriver = http.request.env['res.partner'].search_read([('name', '=', driver_name)])
             if len(existingVehicle) == 0 and len(list(filter(lambda x: x == license_plate, vehicles))) == 0:
                 vehicles.append(license_plate)
-                newVehicle = http.request.env['fleet.vehicle'].sudo().create({'license_plate': license_plate, 'model_id': modelId})
+                newVehicle = http.request.env['fleet.vehicle'].sudo().create({'license_plate': license_plate, 'model_id': modelId, 'state_id': 1})
                 vehicle_id = newVehicle.id
             else:
                 vehicle_id = existingVehicle[0].get('id')
@@ -107,7 +107,7 @@ class ApiController(http.Controller):
             existingDriver = http.request.env['res.partner'].search_read([('name', '=', driver_name)])
             if len(existingVehicle) == 0 and len(list(filter(lambda x: x == license_plate, vehicles))) == 0:
                 vehicles.append(license_plate)
-                newVehicle = http.request.env['fleet.vehicle'].sudo().create({'license_plate': license_plate, 'model_id': modelId})
+                newVehicle = http.request.env['fleet.vehicle'].sudo().create({'license_plate': license_plate, 'model_id': modelId, 'state_id': 1})
                 vehicle_id = newVehicle.id
             else:
                 vehicle_id = existingVehicle[0].get('id')
