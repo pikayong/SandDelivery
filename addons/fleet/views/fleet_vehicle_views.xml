@@ -468,7 +468,7 @@
        <field name="arch" type="xml">
             <graph string="Odometer Values Per Vehicle" sample="1">
                 <field name="driver_id"/>
-                <field name="total" type="measure"/>
+                <field name="value" type="measure"/>
             </graph>
         </field>
     </record>
@@ -696,7 +696,7 @@
        <field name="arch" type="xml">
             <graph string="Petrol Values Per Vehicle" sample="1">
                 <field name="vehicle_id"/>
-                <field name="petrol_rate" type="measure"/>
+                <field name="petrol" type="measure"/>
             </graph>
         </field>
     </record>
