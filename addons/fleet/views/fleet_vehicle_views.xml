@@ -407,7 +407,7 @@
                 <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header> -->
-                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge" column_invisible="True"/>
                 <field name="synced" column_invisible="True" />
                 <field name="datetime" />
                 <field name="vehicle_id" widget="many2one_avatar"/>
@@ -636,7 +636,7 @@
                 <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header> -->
-                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge" column_invisible="True"/>
                 <field name="synced" column_invisible="True" />
                 <field name="datetime" />
                 <field name="vehicle_id" widget="many2one_avatar"/>
