@@ -65,6 +65,7 @@ class ApiController(http.Controller):
         # Odometers
 
         for odometer in odometers:
+            _logger.info(odometer.get('driver_id'))
             driver_name = odometer.get('driver_id')[1]
             license_plate = odometer.get('license_plate')
             vehicle_id = 0
@@ -88,10 +89,10 @@ class ApiController(http.Controller):
             odometer['driver_id'] = driver_id
             del odometer['license_plate']
             existingOdometer = http.request.env['fleet.vehicle.odometer'].search([('name', '=', odometer.get('name'))])
-            # if existingOdometer:
-            #     existingOdometer.write(odometer)
-            # else:
-            #     newDriver = http.request.env['fleet.vehicle.odometer'].sudo().create(odometer)
+            if existingOdometer:
+                existingOdometer.write(odometer)
+            else:
+                newDriver = http.request.env['fleet.vehicle.odometer'].sudo().create(odometer)
         
 
         # Petrols
