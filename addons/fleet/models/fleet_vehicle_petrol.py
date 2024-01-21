@@ -18,7 +18,7 @@ class FleetVehiclePetrol(models.Model):
     driver_id = fields.Many2one(related="vehicle_id.driver_id", string="Driver", readonly=False)
     synced = fields.Integer('Synced')
     synced_display = fields.Char('Status', compute='_get_sync_display', store=False)
-    petrol_rate = fields.Float('Consumed Petrol Rate (RM/km)', compute='_get_petrol_rate', readonly=True)
+    petrol_rate = fields.Float('Consumed Petrol Rate (RM/km)', compute='_get_petrol_rate', store=True, readonly=True)
 
     @api.depends('synced')
     def _get_sync_display(self):
