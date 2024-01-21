@@ -697,7 +697,7 @@
        <field name="arch" type="xml">
             <graph string="Petrol Values Per Vehicle" sample="1">
                 <field name="vehicle_id"/>
-                <field name="petrol" type="measure"/>
+                <field name="petrol_rate" type="measure"/>
             </graph>
         </field>
     </record>
