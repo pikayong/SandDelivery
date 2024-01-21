@@ -14,17 +14,17 @@ class FleetVehicleOdometer(models.Model):
 
     name = fields.Char(compute='_compute_vehicle_log_name', store=True)
     datetime = fields.Datetime('Date & Time', default=fields.Datetime.now)
-    odometer_start = fields.Float('Start', group_operator="max")
-    odometer_end = fields.Float('End', group_operator="max")
+    odometer_start = fields.Float('Start (km)', group_operator="max")
+    odometer_end = fields.Float('End (km)', group_operator="max")
     bucket_amount = fields.Integer('Bucket', required=True)
     loading_weight = fields.Float('Weight (tons)', compute='_compute_loading_weight', readonly=True)
-    total = fields.Float('Total', compute='_compute_total', store=True, readonly=True)
+    total = fields.Float('Total (RM)', compute='_compute_total', store=True, readonly=True)
     value = fields.Float('Distance', compute='_compute_odometer', store=True, readonly=True)
     vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', required=True)
     unit = fields.Selection(related='vehicle_id.odometer_unit', string="Unit", readonly=True)
     driver_id = fields.Many2one(related="vehicle_id.driver_id", string="Driver", readonly=False)
     synced = fields.Integer('Synced')
-    synced_display = fields.Char(compute='_get_sync_display', store=False)
+    synced_display = fields.Char('Status', compute='_get_sync_display', store=False)
 
     @api.depends('synced')
     def _get_sync_display(self):
