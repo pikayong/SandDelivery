@@ -31,10 +31,11 @@
                             class="oe_stat_button"
                             icon="fa-book"
                             context="{'xml_id':'fleet_vehicle_log_contract_action', 'search_default_inactive': not active}"
-                            help="show the contract for this vehicle">
+                            help="show the contract for this vehicle"
+                            invisible="1">
                             <field name="contract_count" widget="statinfo" string="Contracts"/>
                         </button>
-                        <button name="return_action_to_open"
+                        <!-- <button name="return_action_to_open"
                             type="object"
                             class="oe_stat_button"
                             icon="fa-wrench"
@@ -60,6 +61,33 @@
                             invisible="service_activity != 'today'"
                             help="show the services logs for this vehicle">
                             <field name="service_count" widget="statinfo" string="Services"/>
+                        </button> -->
+                        <button name="return_action_to_open"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-wrench"
+                            context="{'xml_id':'fleet_vehicle_log_services_action', 'search_default_inactive': not active}"
+                            invisible="1"
+                            help="show the services logs for this vehicle">
+                            <field name="service_count" widget="statinfo" string="Services"/>
+                        </button>
+                        <button name="return_action_to_open"
+                            type="object"
+                            class="oe_stat_button text-danger"
+                            icon="fa-wrench"
+                            context="{'xml_id':'fleet_vehicle_log_services_action', 'search_default_inactive': not active}"
+                            invisible="1"
+                            help="show the services logs for this vehicle">
+                            <field name="service_count" widget="statinfo" string="Services"/>
+                        </button>
+                        <button name="return_action_to_open"
+                            type="object"
+                            class="oe_stat_button text-warning"
+                            icon="fa-wrench"
+                            context="{'xml_id':'fleet_vehicle_log_services_action', 'search_default_inactive': not active}"
+                            invisible="1"
+                            help="show the services logs for this vehicle">
+                            <field name="service_count" widget="statinfo" string="Services"/>
                         </button>
                         <button name="return_action_to_open"
                             type="object"
@@ -76,43 +104,53 @@
                     <div class="oe_title">
                         <label for="model_id"/>
                         <h1>
-                            <field name="model_id" placeholder="e.g. Model S" class="w-100"/>
+                            <field name="model_id" placeholder="e.g. __/__" class="w-100"/>
                         </h1>
                         <label for="license_plate"/>
                         <h2>
                             <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
                         </h2>
                         <label for="tag_ids" class="me-3"/>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" invisible="1"/>
                     </div>
                     <group col="2">
                         <group string="Driver">
                             <field name="active" invisible="1"/>
                             <field name="vehicle_type" invisible="1"/>
-                            <field name="driver_id" domain="['|', ('company_id', '=', False ), ('company_id', '=', company_id)]" widget="many2one_avatar"/>
-                            <field name="future_driver_id" widget="many2one_avatar"/>
-                            <field name="plan_to_change_car" groups="fleet.fleet_group_manager" invisible="vehicle_type != 'car'"/>
-                            <field name="plan_to_change_bike" groups="fleet.fleet_group_manager"  invisible="vehicle_type != 'bike'"/>
-                            <field name="next_assignation_date"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <!-- <field name="driver_id" domain="['|', ('company_id', '=', False ), ('company_id', '=', company_id)]" widget="many2one_avatar"/> -->
+                            <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
+                            <field name="future_driver_id" widget="many2one_avatar" invisible="1"/>
+                            <!-- <field name="plan_to_change_car" groups="fleet.fleet_group_manager" invisible="vehicle_type != 'car'"/>
+                            <field name="plan_to_change_bike" groups="fleet.fleet_group_manager"  invisible="vehicle_type != 'bike'"/> -->
+                            <field name="plan_to_change_car" groups="fleet.fleet_group_manager" invisible="1"/>
+                            <field name="plan_to_change_bike" groups="fleet.fleet_group_manager"  invisible="1"/>
+                            <field name="next_assignation_date" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company" invisible="1"/>
                         </group>
                         <group string="Vehicle">
                             <field name="category_id"/>
-                            <field name="order_date"/>
-                            <field name="acquisition_date" invisible="vehicle_type != 'car'"/>
-                            <field name="write_off_date" invisible="vehicle_type != 'car'"/>
-                            <field name="vin_sn"/>
-                            <label for="odometer" invisible="vehicle_type != 'car'"/>
+                            <field name="order_date" invisible="1"/>
+                            <!-- <field name="acquisition_date" invisible="vehicle_type != 'car'"/>
+                            <field name="write_off_date" invisible="vehicle_type != 'car'"/> -->
+                            <field name="acquisition_date" invisible="1"/>
+                            <field name="write_off_date" invisible="1"/>
+                            <field name="vin_sn" invisible="1"/>
+                            <!-- <label for="odometer" invisible="vehicle_type != 'car'"/>
                             <div class="o_row o_hr_narrow_field" invisible="vehicle_type != 'car'">
                                 <field name="odometer"/>
                                 <field name="odometer_unit"/>
+                            </div> -->
+                            <label for="odometer" invisible="1"/>
+                            <div class="o_row o_hr_narrow_field" invisible="1">
+                                <field name="odometer"/>
+                                <field name="odometer_unit"/>
                             </div>
-                            <field name="manager_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
-                            <field name="location"/>
+                            <field name="manager_id" domain="[('share', '=', False)]" widget="many2one_avatar_user" invisible="1"/>
+                            <field name="location" invisible="1"/>
                         </group>
                     </group>
-                    <field name="vehicle_properties" columns="2"/>
-                    <notebook>
+                    <field name="vehicle_properties" columns="2" invisible="1"/>
+                    <notebook invisible="1">
                         <page string="Tax Info" name="page_tax_info">
                             <group>
                                 <group col="1" name="fiscality_group" string="Fiscality">
@@ -410,8 +448,8 @@
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge" column_invisible="True"/>
                 <field name="synced" column_invisible="True" />
                 <field name="datetime" />
-                <field name="vehicle_id" widget="many2one_avatar"/>
-                <field name="driver_id" widget="many2one_avatar"/>
+                <field name="vehicle_id" domain="[('state_id', '=', 1)]" widget="many2one_avatar"/>
+                <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="odometer_start" />
                 <field name="odometer_end" />
                 <field name="bucket_amount" />
@@ -639,8 +677,8 @@
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge" column_invisible="True"/>
                 <field name="synced" column_invisible="True" />
                 <field name="datetime" />
-                <field name="vehicle_id" widget="many2one_avatar"/>
-                <field name="driver_id" widget="many2one_avatar"/>
+                <field name="vehicle_id" domain="[('state_id', '=', 1)]" widget="many2one_avatar"/>
+                <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="odometer" />
                 <field name="petrol" />
                 <field name="petrol_rate" />
