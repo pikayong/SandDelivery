@@ -138,7 +138,7 @@
                 <field name="brand_id"/>
                 <filter string="Contains Vehicle" name="contains_vehicle" domain="[('vehicle_count', '!=', 0)]"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_brand" context="{'group_by' : 'brand_id'}" string="Manufacturers"/>
+                    <filter name="groupby_brand" context="{'group_by' : 'brand_id'}" string="Brands"/>
                     <filter name="groupby_category" context="{'group_by' : 'category_id'}" string="Category"/>
                     <filter name="groupby_vehicle_type" context="{'group_by' : 'vehicle_type'}" string="Vehicle Type"/>
                 </group>
@@ -251,7 +251,7 @@
     </record>
 
     <record id='fleet_vehicle_model_brand_action' model='ir.actions.act_window'>
-        <field name="name">Manufacturers</field>
+        <field name="name">Brands</field>
         <field name="res_model">fleet.vehicle.model.brand</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
