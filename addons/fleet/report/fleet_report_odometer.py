@@ -43,7 +43,7 @@ from
 	public.fleet_vehicle_odometer o
 left join 
 	public.fleet_vehicle v
-	on o.vehicle_id = v.id)
+	on o.vehicle_id = v.id) a
 order by
 	date desc
 """
