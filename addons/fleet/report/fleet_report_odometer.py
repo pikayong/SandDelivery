@@ -30,8 +30,7 @@ select
 	vehicle_id,
 	driver_id
 from
-(
-select
+(select
 	o.id,
 	o.name,
 	o.date,
@@ -44,8 +43,7 @@ from
 	public.fleet_vehicle_odometer o
 left join 
 	public.fleet_vehicle v
-	on o.vehicle_id = v.id
-)
+	on o.vehicle_id = v.id)
 order by
 	date desc
 """
