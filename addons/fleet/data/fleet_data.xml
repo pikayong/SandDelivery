@@ -16,11 +16,13 @@
         <record id="fleet_vehicle_state_active" model="fleet.vehicle.state">
             <field name="name">Active</field>
             <field name="sequence">4</field>
+            <field name="visibility">1</field>
         </record>
 
         <record id="fleet_vehicle_state_unavailable" model="fleet.vehicle.state">
             <field name="name">Unavailable</field>
             <field name="sequence">5</field>
+            <field name="visibility">0</field>
         </record>
 
         <record id="type_contract_omnium" model="fleet.service.type">

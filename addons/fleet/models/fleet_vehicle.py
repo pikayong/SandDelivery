@@ -29,9 +29,12 @@ class FleetVehicle(models.Model):
     def _get_default_state(self):
         # state = self.env.ref('fleet.fleet_vehicle_state_new_request', raise_if_not_found=False)
         # return state if state and state.id else False
-        activeState = self.env['fleet.vehicle.state'].search([('id', '=', '1')])
-        self._logger.info(activeState)
-        return activeState if activeState and activeState.id else False
+        stateList = list(self.env['fleet.vehicle.state'].search([], order='sequence asc'))
+        if len(stateList) == 0:
+            return False
+        self._logger.info(stateList[0])
+        defaultState = stateList[0]
+        return defaultState if defaultState and defaultState.id else False
 
 
     name = fields.Char(compute="_compute_vehicle_name", store=True)
@@ -83,6 +86,7 @@ class FleetVehicle(models.Model):
     tag_ids = fields.Many2many('fleet.vehicle.tag', 'fleet_vehicle_vehicle_tag_rel', 'vehicle_tag_id', 'tag_id', 'Tags', copy=False)
     odometer = fields.Float(compute='_get_odometer', inverse='_set_odometer', string='Last Odometer',
         help='Odometer measure of the vehicle at the moment of this log')
+    initial_odometer = fields.Integer('Initial Odometer (km)', required=True)
     odometer_unit = fields.Selection([
         ('kilometers', 'km'),
         ('miles', 'mi')
@@ -126,6 +130,13 @@ class FleetVehicle(models.Model):
     ], compute='_compute_service_activity')
     vehicle_properties = fields.Properties('Properties', definition='model_id.vehicle_properties_definition', copy=True)
     synced = fields.Integer('Synced')
+    visibility = fields.Boolean(compute='_compute_visibility', store=False, readonly=True)
+
+    @api.depends('state_id')
+    def _compute_visibility(self):
+        for vehicle in self:
+            vehicle.visibility = vehicle.state_id.visibility == '1'
+            
 
     @api.depends('log_services')
     def _compute_service_activity(self):
@@ -167,7 +178,8 @@ class FleetVehicle(models.Model):
         for record in self:
             if record.odometer:
                 datetime = fields.Datetime.context_timestamp(record)
-                data = {'value': record.odometer, 'datetime': datetime, 'vehicle_id': record.id}
+                date = fields.Date.today(record)
+                data = {'value': record.odometer, 'date': date, 'vehicle_id': record.id}
                 self.env['fleet.vehicle.odometer'].create(data)
 
     def _compute_count_all(self):

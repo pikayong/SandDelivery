@@ -99,23 +99,28 @@
 
                     <field name="image_1920" widget='image' class="oe_avatar" options='{"preview_image": "avatar_128"}'/>
                     <div class="oe_title">
-                        <field name="company_type" options="{'horizontal': true}" widget="radio" groups="base.group_no_one"/>
+                        <field name="company_type" options="{'horizontal': true}" widget="radio" groups="base.group_no_one" invisible="1"/>
                         <h1>
                             <field id="company" name="name" default_focus="1" placeholder="e.g. Lumber Inc" invisible="not is_company" required="type == 'contact' and is_company"/>
                             <field id="individual" name="name" default_focus="1" placeholder="e.g. Brandom Freeman" invisible="is_company" required="type == 'contact' and not is_company"/>
                         </h1>
+                        <!-- <field name="parent_id"
+                            widget="res_partner_many2one"
+                            placeholder="Company Name..."
+                            domain="[('is_company', '=', True)]" context="{'default_is_company': True, 'show_vat': True, 'default_user_id': user_id}"
+                            invisible="is_company"/> -->
                         <field name="parent_id"
                             widget="res_partner_many2one"
                             placeholder="Company Name..."
                             domain="[('is_company', '=', True)]" context="{'default_is_company': True, 'show_vat': True, 'default_user_id': user_id}"
-                            invisible="is_company"/>
+                            invisible="1"/>
                     </div>
                     <group>
                         <field name="function" placeholder="e.g. Sales Director" invisible="is_company"/>
                         <field name="user_ids" invisible="1"/>
                         <field name="email" widget="email" context="{'gravatar_image': True}" required="context.get('force_email', False) or user_ids"/>
                         <field name="phone" widget="phone" options="{'enable_sms': false}"/>
-                        <field name="mobile" widget="phone" options="{'enable_sms': false}"/>
+                        <field name="mobile" widget="phone" options="{'enable_sms': false}" invisible="1"/>
                     </group>
                 </form>
             </field>
@@ -183,12 +188,12 @@
                         <field name="active" invisible="1"/>
                         <field name="company_id" invisible="1"/>
                         <field name="country_code" invisible="1"/>
-                        <field name="company_type" widget="radio" options="{'horizontal': true}"/>
+                        <field name="company_type" widget="radio" options="{'horizontal': true}" invisible="1"/>
                         <h1>
                             <field id="company" options="{'line_breaks': False}" widget="text" class="text-break" name="name" default_focus="1" placeholder="e.g. Lumber Inc" invisible="not is_company" required="type == 'contact'"/>
                             <field id="individual" options="{'line_breaks': False}" widget="text" class="text-break" name="name" default_focus="1" placeholder="e.g. Brandom Freeman" invisible="is_company" required="type == 'contact'"/>
                         </h1>
-                        <div class="o_row">
+                        <div class="o_row" invisible="1">
                             <field name="parent_id"
                                 widget="res_partner_many2one"
                                 placeholder="Company Name..."
@@ -226,19 +231,19 @@
                             <field name="vat" placeholder="e.g. BE0477472701" readonly="parent_id"/>
                         </group>
                         <group>
-                            <field name="function" placeholder="e.g. Sales Director"
+                            <field name="function" placeholder="e.g. Driver"
                                 invisible="is_company"/>
                             <field name="phone" widget="phone"/>
-                            <field name="mobile" widget="phone"/>
+                            <field name="mobile" widget="phone" invisible="1"/>
                             <field name="user_ids" invisible="1"/>
                             <field name="email" widget="email" context="{'gravatar_image': True}" required="user_ids"/>
-                            <field name="website" string="Website" widget="url" placeholder="e.g. https://www.odoo.com"/>
+                            <field name="website" string="Website" widget="url" placeholder="e.g. https://www.odoo.com" invisible="1"/>
                             <field name="title" options='{"no_open": True}' placeholder="e.g. Mister"
                                 invisible="is_company"/>
                             <field name="active_lang_count" invisible="1"/>
                             <field name="lang" invisible="active_lang_count &lt;= 1"/>
                             <field name="category_id" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"
-                                   placeholder='e.g. "B2B", "VIP", "Consulting", ...'/>
+                                   placeholder='e.g. "B2B", "VIP", "Consulting", ...' invisible="1"/>
                         </group>
                     </group>
 
@@ -349,7 +354,7 @@
                                 </form>
                             </field>
                         </page>
-                        <page name='sales_purchases' string="Sales &amp; Purchase">
+                        <page name='sales_purchases' string="Sales &amp; Purchase" invisible="1">
                             <group name="container_row_2">
                                 <group string="Sales" name="sale" priority="1">
                                     <field name="user_id" widget="many2one_avatar_user" domain="[('share', '=', False)]"/>
