@@ -10,7 +10,6 @@ class FleetVehicleState(models.Model):
     _description = 'Vehicle Status'
 
     name = fields.Char(required=True, translate=True)
-    visible = fields.Boolean(required=True)
     sequence = fields.Integer()
     visibility = fields.Selection([('1', 'Visible'), ('0', 'Hidden')], string='Visible on Selection')
 
