@@ -453,8 +453,8 @@
                 <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header> -->
-                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" />
+                <!-- <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" /> -->
                 <field name="datetime" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
@@ -543,8 +543,8 @@
                 <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header> -->
-                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" />
+                <!-- <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
@@ -744,8 +744,8 @@
                 <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header> -->
-                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" />
+                <!-- <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="petrol" />
