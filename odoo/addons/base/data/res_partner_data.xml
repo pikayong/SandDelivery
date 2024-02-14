@@ -19,6 +19,12 @@
             <field name="active" eval="False"/>
         </record>
 
+        <record model="res.partner" id="base.partner_tech_admin">
+            <field name="name">Technical Administrator</field>
+            <field name="company_id" ref="main_company"/>
+            <field name="email">techadmin@example.com</field>
+        </record>
+
         <record model="res.partner" id="base.partner_admin">
             <field name="name">Administrator</field>
             <field name="company_id" ref="main_company"/>

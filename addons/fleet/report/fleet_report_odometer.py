@@ -14,7 +14,7 @@ class FleetReportOdometer(models.Model):
     
     name = fields.Char('Name', readonly=True)
     date = fields.Date('Date', readonly=True)
-    value = fields.Float('Odometer (km)', group_operator="max", readonly=True)
+    # value = fields.Float('Odometer (km)', group_operator="max", readonly=True)
     distance = fields.Float('Distance (km)', group_operator="sum", readonly=True)
     vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', readonly=True)
     driver_id = fields.Many2one('res.partner', 'Driver', readonly=True)
@@ -25,7 +25,6 @@ select
 	id,
 	name,
 	date,
-	value,
 	case when previous_value is null then value - initial_odometer else value - previous_value end as distance,
 	vehicle_id,
 	driver_id

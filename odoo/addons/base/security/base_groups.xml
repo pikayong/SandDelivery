@@ -7,6 +7,23 @@
             Note that the field 'category_id' is set later in
             base/data/ir_module_category_data.xml
         -->
+
+        <!--
+            Start::Custom Group
+        -->
+        <record model="res.groups" id="group_serverside_admin">
+            <field name="name">Server Side Admin</field>
+            <field name="implied_ids" eval="[Command.link(ref('group_user'))]"/>
+            <field name="users" eval="[Command.link(ref('base.user_comp_admin'))]"/>
+        </record>
+        <record model="res.groups" id="group_clientside_admin">
+            <field name="name">Client Side Admin</field>
+            <field name="implied_ids" eval="[Command.link(ref('group_user'))]"/>
+        </record>
+        <!--
+            Start::Custom Group
+        -->
+
         <record model="res.groups" id="group_erp_manager">
             <field name="name">Access Rights</field>
             <field name="implied_ids" eval="[Command.link(ref('group_user'))]"/>

@@ -414,7 +414,7 @@
 
     <menuitem name="Fleet" parent="menu_root" id="fleet_vehicles" sequence="2" groups="fleet_group_user"/>
     <menuitem action="fleet_vehicle_action" parent="fleet_configuration" name="Vehicles"
-        id="fleet_vehicle_menu" groups="fleet_group_user" sequence="1"/>
+        id="fleet_vehicle_menu" groups="fleet_group_manager" sequence="1"/>
 
    <record id='fleet_vehicle_trip_view_form' model='ir.ui.view'>
         <field name="name">fleet.vehicle.trip.form</field>
@@ -596,7 +596,7 @@
         </field>
     </record>
 
-    <menuitem action="fleet_vehicle_odometer_action" parent="fleet_vehicles" id="fleet_vehicle_odometer_menu" groups="fleet_group_user" sequence="0"/>
+    <menuitem action="fleet_vehicle_odometer_action" parent="fleet_vehicles" id="fleet_vehicle_odometer_menu" groups="fleet_group_manager" sequence="0"/>
 
     <record id='fleet_vehicle_service_types_view_tree' model='ir.ui.view'>
         <field name="name">fleet.service.type.tree</field>
@@ -665,8 +665,8 @@
         </field>
     </record>
 
-    <menuitem name="Vehicle Status" parent="fleet_models_configuration" id="fleet_vehicles_configuration" sequence="4" groups="base.group_no_one" active="False"/>
-    <menuitem action="fleet_vehicle_state_action" parent="fleet_models_configuration" id="fleet_vehicle_state_menu" sequence="10" groups="base.group_no_one"/>
+    <menuitem name="Vehicle Status" parent="fleet_models_configuration" id="fleet_vehicles_configuration" sequence="4" groups="fleet_group_manager" active="False"/>
+    <menuitem action="fleet_vehicle_state_action" parent="fleet_models_configuration" id="fleet_vehicle_state_menu" sequence="10" groups="fleet_group_manager"/>
 
     <record id="fleet_vehicle_tag_view_view_form" model="ir.ui.view">
         <field name="name">fleet.vehicle.tag.form</field>
@@ -703,7 +703,7 @@
         </field>
     </record>
 
-    <menuitem id="fleet_vehicle_tag_menu" parent="fleet_vehicles_configuration" action="fleet_vehicle_tag_action" sequence="20" groups="base.group_no_one" active="False"/>
+    <menuitem id="fleet_vehicle_tag_menu" parent="fleet_vehicles_configuration" action="fleet_vehicle_tag_action" sequence="20" groups="fleet_group_manager" active="False"/>
 
     <record id="fleet_vehicle_assignation_log_view_list" model="ir.ui.view">
         <field name="name">fleet.vehicle.assignation.log.view.tree</field>
@@ -818,7 +818,7 @@
         </field>
     </record>
 
-    <menuitem action="fleet_vehicle_petrol_action" parent="fleet_vehicles" id="fleet_vehicle_petrol_menu" groups="fleet_group_user" sequence="11"/>
+    <menuitem action="fleet_vehicle_petrol_action" parent="fleet_vehicles" id="fleet_vehicle_petrol_menu" groups="fleet_group_manager" sequence="11"/>
 
     <record id='fleet_vehicle_trip_master_view_form' model='ir.ui.view'>
         <field name="name">fleet.vehicle.trip.master.form</field>
@@ -881,6 +881,6 @@
           </p>
         </field>
     </record>
-    <menuitem action="fleet_vehicle_trip_master_action" parent="fleet_configuration" id="fleet_vehicle_trip_master_menu" groups="fleet_group_user" sequence="3"/>
+    <menuitem action="fleet_vehicle_trip_master_action" parent="fleet_configuration" id="fleet_vehicle_trip_master_menu" groups="fleet_group_manager" sequence="3"/>
 
 </odoo>

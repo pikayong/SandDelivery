@@ -33,12 +33,17 @@
         <field name="act_window_id" ref="action_contacts"/>
     </record>
 
-
+<!-- 
     <menuitem name="Contacts"
         id="menu_contacts"
         sequence="20"
         web_icon="contacts,static/description/icon.png"
-        groups="base.group_user,base.group_partner_manager"/>
+        groups="base.group_user,base.group_partner_manager"/> -->
+    <menuitem name="Contacts"
+        id="menu_contacts"
+        sequence="20"
+        web_icon="contacts,static/description/icon.png"
+        groups="base.group_erp_manager,base.group_serverside_admin"/>
 
     <menuitem id="res_partner_menu_contacts"
         name="Contacts"

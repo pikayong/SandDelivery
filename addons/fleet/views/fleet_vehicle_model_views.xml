@@ -256,7 +256,7 @@
         <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">
-            Create a new manufacturer
+            Create a new brand
           </p>
         </field>
     </record>
@@ -307,7 +307,7 @@
     </record>
 
     <menuitem name="Vehicle Profile" parent="fleet_configuration" id="fleet_models_configuration" sequence="2" groups="fleet_group_manager"/>
-    <menuitem name="Brands" action="fleet_vehicle_model_brand_action" parent="fleet_models_configuration" id="fleet_vehicle_model_brand_menu" sequence="1"/>
-    <menuitem action="fleet_vehicle_model_action" parent="fleet_models_configuration" id="fleet_vehicle_model_menu" sequence="2"/>
-    <menuitem action="fleet_vehicle_model_category_action" parent="fleet_models_configuration" id="fleet_vehicle_model_category_menu" sequence="3"/>
+    <menuitem name="Brands" action="fleet_vehicle_model_brand_action" parent="fleet_models_configuration" id="fleet_vehicle_model_brand_menu" sequence="1" groups="fleet_group_manager"/>
+    <menuitem action="fleet_vehicle_model_action" parent="fleet_models_configuration" id="fleet_vehicle_model_menu" sequence="2" groups="fleet_group_manager"/>
+    <menuitem action="fleet_vehicle_model_category_action" parent="fleet_models_configuration" id="fleet_vehicle_model_category_menu" sequence="3" groups="fleet_group_manager"/>
 </odoo>
