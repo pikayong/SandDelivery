@@ -829,10 +829,10 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="distance"/>
-                            <field name="price"/>
-                            <field name="bucket"/>
-                            <field name="weight"/>
+                            <field name="distance" style="width: 200px !important;"/>
+                            <field name="price" style="width: 200px !important;"/>
+                            <field name="bucket" style="width: 200px !important;"/>
+                            <field name="weight" style="width: 200px !important;"/>
                         </group>
                     </group>
                 </sheet>
