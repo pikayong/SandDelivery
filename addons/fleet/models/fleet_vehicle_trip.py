@@ -79,11 +79,11 @@ class FleetVehicleTrip(models.Model):
                 name += ' / ' + str(record.datetime)
             record.name = name
 
-    @api.depends('bucket_amount', 'bucket')
+    @api.depends('trip_id', 'bucket_amount', 'bucket')
     def _compute_loading_weight(self):
         for record in self:
-            weight = 0
-            if record.bucket > 0:
+            weight = record.trip_id.weight
+            if record.bucket > 0 and record.bucket_amount > 0:
                 weight = record.bucket_amount / record.bucket
             record.loading_weight = weight
     

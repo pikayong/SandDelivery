@@ -829,12 +829,10 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <label for="distance"/>
                             <field name="distance"/>
-                            <label for="price"/>
                             <field name="price"/>
-                            <label for="bucket"/>
                             <field name="bucket"/>
+                            <field name="weight"/>
                         </group>
                     </group>
                 </sheet>
@@ -851,6 +849,7 @@
                 <field name="distance" />
                 <field name="price" />
                 <field name="bucket" />
+                <field name="weight" />
             </tree>
         </field>
     </record>
@@ -864,6 +863,7 @@
                 <field name="distance"/>
                 <field name="price"/>
                 <field name="bucket"/>
+                <field name="weight"/>
             </search>
         </field>
     </record>

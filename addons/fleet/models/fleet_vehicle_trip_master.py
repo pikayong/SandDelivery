@@ -15,3 +15,4 @@ class FleetVehicleTripMaster(models.Model):
     distance = fields.Integer('Distance (km)', required=True)
     price = fields.Float('Unit Price(MYR)', required=True)
     bucket = fields.Integer('Buckets per 1ton', required=True)
+    weight = fields.Integer('Default Weight (ton)', required=True)
