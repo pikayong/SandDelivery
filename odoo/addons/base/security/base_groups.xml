@@ -19,6 +19,7 @@
         <record model="res.groups" id="group_clientside_admin">
             <field name="name">Client Side Admin</field>
             <field name="implied_ids" eval="[Command.link(ref('group_user'))]"/>
+            <field name="users" eval="[Command.link(ref('base.user_client_admin'))]"/>
         </record>
         <!--
             Start::Custom Group

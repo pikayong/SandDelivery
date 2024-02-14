@@ -31,6 +31,12 @@
             <field name="email">admin@example.com</field>
         </record>
 
+        <record model="res.partner" id="base.partner_client_admin">
+            <field name="name">Client Side Administrator</field>
+            <field name="company_id" ref="main_company"/>
+            <field name="email">clientadmin@example.com</field>
+        </record>
+
         <record id="public_partner" model="res.partner">
             <field name="name">Public user</field>
             <field name="active" eval="False"/>

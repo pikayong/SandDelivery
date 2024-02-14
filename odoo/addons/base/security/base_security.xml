@@ -48,7 +48,7 @@
         <record model="ir.rule" id="ir_hide_admin">
             <field name="name">Hide Admin from User</field>
             <field name="model_id" ref="base.model_res_partner"/>
-            <field name="domain_force">[('name','!=','Technical Administrator'), ('is_company', '=', False)]</field>
+            <field name="domain_force">[('name','!=','Technical Administrator'), ('is_company', '=', False), ('name','!=','Client Side Administrator')]</field>
             <field name="groups" eval="[Command.link(ref('group_clientside_admin')), Command.link(ref('group_serverside_admin'))]"/>
         </record>
 
