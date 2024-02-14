@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="action_contacts" model="ir.actions.act_window">
-        <field name="name">Contacts</field>
+        <field name="name">Employees</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,tree,form,activity</field>
         <field name="search_view_id" ref="base.view_res_partner_filter"/>
@@ -39,14 +39,14 @@
         sequence="20"
         web_icon="contacts,static/description/icon.png"
         groups="base.group_user,base.group_partner_manager"/> -->
-    <menuitem name="Contacts"
+    <menuitem name="Employees"
         id="menu_contacts"
         sequence="20"
         web_icon="contacts,static/description/icon.png"
         groups="base.group_erp_manager,base.group_serverside_admin"/>
 
     <menuitem id="res_partner_menu_contacts"
-        name="Contacts"
+        name="Employees"
         action="action_contacts"
         parent="menu_contacts"
         sequence="2"/>
