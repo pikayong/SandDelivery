@@ -13,11 +13,12 @@ class FleetVehicleTrip(models.Model):
     _order = 'datetime desc'
 
     name = fields.Char(compute='_compute_vehicle_log_name', store=True)
+    ref_no = fields.Char('Reference No', store=True)
     datetime = fields.Datetime('Date & Time', default=fields.Datetime.now)
     trip_id = fields.Many2one('fleet.vehicle.trip.master', 'Trip', required=True)
     distance = fields.Integer('Distance (km)', compute='_compute_trip_distance', store=True, required=True, readonly=False)
     price = fields.Float('Unit Price (MYR)', compute='_compute_trip_price', store=True, required=True, readonly=False)
-    bucket = fields.Integer('Buckets per 1ton', compute='_compute_trip_bucket', store=True, required=True, readonly=False)
+    bucket = fields.Integer('Ton/bucket', compute='_compute_trip_bucket', store=True, required=True, readonly=False)
     bucket_amount = fields.Integer('Bucket', store=True)
     loading_weight = fields.Float('Weight (tons)', compute='_compute_loading_weight', store=True, readonly=False)
     total = fields.Float('Total (RM)', compute='_compute_total', store=True, readonly=True)
@@ -84,7 +85,7 @@ class FleetVehicleTrip(models.Model):
         for record in self:
             weight = record.trip_id.weight
             if record.bucket > 0 and record.bucket_amount > 0:
-                weight = record.bucket_amount / record.bucket
+                weight = record.bucket_amount * record.bucket
             record.loading_weight = weight
     
     @api.depends('distance', 'loading_weight', 'price')

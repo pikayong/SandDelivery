@@ -306,8 +306,10 @@
         </field>
     </record>
 
-    <menuitem name="Vehicle Profile" parent="fleet_configuration" id="fleet_models_configuration" sequence="2" groups="fleet_group_manager"/>
-    <menuitem name="Brands" action="fleet_vehicle_model_brand_action" parent="fleet_models_configuration" id="fleet_vehicle_model_brand_menu" sequence="1" groups="fleet_group_manager"/>
-    <menuitem action="fleet_vehicle_model_action" parent="fleet_models_configuration" id="fleet_vehicle_model_menu" sequence="2" groups="fleet_group_manager"/>
-    <menuitem action="fleet_vehicle_model_category_action" parent="fleet_models_configuration" id="fleet_vehicle_model_category_menu" sequence="3" groups="fleet_group_manager"/>
+    <menuitem name="Employee Profile" parent="fleet_configuration" id="employee_models_configuration" sequence="2" groups="base.group_erp_manager,base.group_serverside_admin"/>
+    <menuitem name="Vehicle Profile" parent="fleet_configuration" id="fleet_models_configuration" sequence="3" groups="fleet_group_manager"/>
+    <menuitem name="Trips Profile" parent="fleet_configuration" id="trip_master_configuration" sequence="4" groups="fleet_group_manager"/>
+    <menuitem name="Brands" action="fleet_vehicle_model_brand_action" parent="fleet_models_configuration" id="fleet_vehicle_model_brand_menu" sequence="2" groups="fleet_group_manager"/>
+    <menuitem action="fleet_vehicle_model_action" parent="fleet_models_configuration" id="fleet_vehicle_model_menu" sequence="3" groups="fleet_group_manager"/>
+    <menuitem action="fleet_vehicle_model_category_action" parent="fleet_models_configuration" id="fleet_vehicle_model_category_menu" sequence="4" groups="fleet_group_manager"/>
 </odoo>

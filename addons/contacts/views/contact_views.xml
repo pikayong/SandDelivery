@@ -33,6 +33,7 @@
         <field name="act_window_id" ref="action_contacts"/>
     </record>
 
+
 <!-- 
     <menuitem name="Contacts"
         id="menu_contacts"
@@ -43,12 +44,14 @@
         id="menu_contacts"
         sequence="20"
         web_icon="contacts,static/description/icon.png"
-        groups="base.group_erp_manager,base.group_serverside_admin"/>
+        groups="base.group_erp_manager,base.group_serverside_admin"
+        active="False"/>
 
     <menuitem id="res_partner_menu_contacts"
         name="Employees"
         action="action_contacts"
-        parent="menu_contacts"
+        parent="fleet.employee_models_configuration"
+        groups="base.group_erp_manager,base.group_serverside_admin"
         sequence="2"/>
 
     <menuitem id="res_partner_menu_config"

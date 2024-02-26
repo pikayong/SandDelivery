@@ -102,23 +102,23 @@
                     <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
                     <field name="image_128" widget='image' class="oe_avatar"/>
                     <div class="oe_title">
-                        <label for="model_id"/>
-                        <h1>
-                            <field name="model_id" placeholder="e.g. __/__" class="w-100"/>
-                        </h1>
                         <label for="license_plate"/>
-                        <h2>
+                        <h1>
                             <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
-                        </h2>
+                        </h1>
                         <label for="tag_ids" class="me-3"/>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" invisible="1"/>
                     </div>
-                    <group col="2">
+                    <group>
+                        <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
+                        <field name="acquisition_date"/>
+                        <field name="initial_odometer"/>
+                    </group>
+                    <group col="2" invisible="1">
                         <group string="Driver">
                             <field name="active" invisible="1"/>
                             <field name="vehicle_type" invisible="1"/>
                             <!-- <field name="driver_id" domain="['|', ('company_id', '=', False ), ('company_id', '=', company_id)]" widget="many2one_avatar"/> -->
-                            <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                             <field name="future_driver_id" widget="many2one_avatar" invisible="1"/>
                             <!-- <field name="plan_to_change_car" groups="fleet.fleet_group_manager" invisible="vehicle_type != 'car'"/>
                             <field name="plan_to_change_bike" groups="fleet.fleet_group_manager"  invisible="vehicle_type != 'bike'"/> -->
@@ -128,11 +128,9 @@
                             <field name="company_id" groups="base.group_multi_company" invisible="1"/>
                         </group>
                         <group string="Vehicle">
-                            <field name="category_id"/>
                             <field name="order_date" invisible="1"/>
                             <!-- <field name="acquisition_date" invisible="vehicle_type != 'car'"/>
                             <field name="write_off_date" invisible="vehicle_type != 'car'"/> -->
-                            <field name="acquisition_date"/>
                             <field name="write_off_date" invisible="1"/>
                             <field name="vin_sn" invisible="1"/>
                             <!-- <label for="odometer" invisible="vehicle_type != 'car'"/>
@@ -145,7 +143,6 @@
                                 <field name="odometer"/>
                                 <field name="odometer_unit"/>
                             </div>
-                            <field name="initial_odometer"/>
                             <field name="manager_id" domain="[('share', '=', False)]" widget="many2one_avatar_user" invisible="1"/>
                             <field name="location" invisible="1"/>
                         </group>
@@ -169,8 +166,12 @@
                         </page>
                         <page string="Model" name="page_model">
                             <group>
-                                <group string="Model">
+                                <group string="Specification">
+                                    <field name="brand_id"/>
+                                    <field name="model_id" placeholder="e.g. __/__"/>
                                     <field name="model_year"/>
+                                    <field name="capacity"/>
+                                    <field name="category_id"/>
                                     <field name="transmission"/>
                                     <field name="color"/>
                                     <field name="seats" invisible="vehicle_type != 'car'"/>
@@ -412,8 +413,8 @@
         </field>
     </record>
 
-    <menuitem name="Fleet" parent="menu_root" id="fleet_vehicles" sequence="2" groups="fleet_group_user"/>
-    <menuitem action="fleet_vehicle_action" parent="fleet_configuration" name="Vehicles"
+    <menuitem name="Data Entry" parent="menu_root" id="fleet_vehicles" sequence="2" groups="fleet_group_user"/>
+    <menuitem action="fleet_vehicle_action" parent="fleet_models_configuration" name="Vehicles"
         id="fleet_vehicle_menu" groups="fleet_group_manager" sequence="1"/>
 
    <record id='fleet_vehicle_trip_view_form' model='ir.ui.view'>
@@ -422,22 +423,20 @@
         <field name="arch" type="xml">
             <form string="trip Logs">
                 <sheet>
-                    <group>
-                        <group>
+                    <group col="2">
+                        <group string="Information">
                             <field name="datetime" />
+                            <field name="ref_no" />
                             <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                             <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                         </group>
-                        <group>
+                        <group string="Trip Details">
                             <field name="trip_id"/>
-                            <field name="distance" />
-                            <field name="price" />
-                            <field name="bucket" />
-                        </group>
-                        <group>
-                            <field name="bucket_amount" />
-                            <field name="loading_weight" />
-                            <field name="total" />
+                            <field name="distance" invisible="not trip_id"/>
+                            <field name="price" invisible="not trip_id" />
+                            <field name="bucket" invisible="not trip_id" />
+                            <field name="bucket_amount" invisible="not trip_id" />
+                            <field name="loading_weight" invisible="not trip_id" />
                         </group>
                     </group>
                 </sheet>
@@ -449,13 +448,14 @@
         <field name="name">fleet.vehicle.trip.tree</field>
         <field name="model">fleet.vehicle.trip</field>
         <field name="arch" type="xml">
-            <tree string="Trip Logs" editable="top">
-                <!-- <header>
+            <tree string="Trip Logs">
+                <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
-                </header> -->
-                <!-- <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" /> -->
+                </header>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" />
                 <field name="datetime" />
+                <field name="ref_no" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="trip_id"/>
@@ -540,11 +540,11 @@
         <field name="model">fleet.vehicle.odometer</field>
         <field name="arch" type="xml">
             <tree string="Odometer Logs" editable="top">
-                <!-- <header>
+                <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
-                </header> -->
-                <!-- <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" /> -->
+                </header>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" />
                 <field name="date" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
@@ -665,7 +665,7 @@
         </field>
     </record>
 
-    <menuitem name="Vehicle Status" parent="fleet_models_configuration" id="fleet_vehicles_configuration" sequence="4" groups="fleet_group_manager" active="False"/>
+    <menuitem name="Vehicle Status" parent="fleet_models_configuration" id="fleet_vehicles_configuration" sequence="5" groups="fleet_group_manager" active="False"/>
     <menuitem action="fleet_vehicle_state_action" parent="fleet_models_configuration" id="fleet_vehicle_state_menu" sequence="10" groups="fleet_group_manager"/>
 
     <record id="fleet_vehicle_tag_view_view_form" model="ir.ui.view">
@@ -741,11 +741,11 @@
         <field name="model">fleet.vehicle.petrol</field>
         <field name="arch" type="xml">
             <tree string="Petrol Logs" editable="top">
-                <!-- <header>
+                <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
-                </header> -->
-                <!-- <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" /> -->
+                </header>
+                <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
+                <field name="synced" column_invisible="True" />
                 <field name="date" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="petrol" />
@@ -881,6 +881,6 @@
           </p>
         </field>
     </record>
-    <menuitem action="fleet_vehicle_trip_master_action" parent="fleet_configuration" id="fleet_vehicle_trip_master_menu" groups="fleet_group_manager" sequence="3"/>
+    <menuitem action="fleet_vehicle_trip_master_action" parent="trip_master_configuration" id="fleet_vehicle_trip_master_menu" groups="fleet_group_manager" sequence="3"/>
 
 </odoo>

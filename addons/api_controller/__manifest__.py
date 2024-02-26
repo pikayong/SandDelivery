@@ -30,5 +30,7 @@ Long description of module's purpose
     'demo': [
         'demo/demo.xml',
     ],
+    'installable': True,
+    'auto_install': True,
 }
 

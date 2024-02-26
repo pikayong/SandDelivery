@@ -81,7 +81,7 @@ class FleetVehicle(models.Model):
         help='Current state of the vehicle', ondelete="set null")
     location = fields.Char(help='Location of the vehicle (garage, ...)')
     seats = fields.Integer('Seats Number', help='Number of seats of the vehicle', compute='_compute_model_fields', store=True, readonly=False)
-    model_year = fields.Char('Model Year', help='Year of the model', compute='_compute_model_fields', store=True, readonly=False)
+    model_year = fields.Char('Year Made', help='Year of the model', compute='_compute_model_fields', store=True, readonly=False)
     doors = fields.Integer('Doors Number', help='Number of doors of the vehicle', compute='_compute_model_fields', store=True, readonly=False)
     tag_ids = fields.Many2many('fleet.vehicle.tag', 'fleet_vehicle_vehicle_tag_rel', 'vehicle_tag_id', 'tag_id', 'Tags', copy=False)
     odometer = fields.Float(compute='_get_odometer', inverse='_set_odometer', string='Last Odometer',
@@ -131,6 +131,11 @@ class FleetVehicle(models.Model):
     vehicle_properties = fields.Properties('Properties', definition='model_id.vehicle_properties_definition', copy=True)
     synced = fields.Integer('Synced')
     visibility = fields.Boolean(compute='_compute_visibility', store=False, readonly=True)
+    capacity = fields.Float(string="Capacity (ton)", store=True)
+
+    @api.onchange('brand_id')
+    def onchange_brands_list(self):
+        return {'domain': {'model_id': [('brand_id', '=', 'self.brand_id')]}}
 
     @api.depends('state_id')
     def _compute_visibility(self):

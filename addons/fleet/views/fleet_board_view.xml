@@ -102,7 +102,7 @@
         </field>
     </record>
 
-    <menuitem name="Reporting" parent="menu_root" id="menu_fleet_reporting" sequence="99" groups="fleet_group_manager"/>
+    <menuitem name="Reports" parent="menu_root" id="menu_fleet_reporting" sequence="99" groups="fleet_group_manager"/>
     <menuitem id="menu_fleet_reporting_costs"
               name="Costs"
               parent="menu_fleet_reporting"
