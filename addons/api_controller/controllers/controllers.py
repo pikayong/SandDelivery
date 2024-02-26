@@ -58,7 +58,7 @@ class ApiController(http.Controller):
         ]
 
         for masterData in masterDataList:
-            masterData.data = http.request.env[masterData.name].search_read()
+            masterData['datasets'] = http.request.env[masterData.name].search_read()
 
         _logger.info(masterData)
         
