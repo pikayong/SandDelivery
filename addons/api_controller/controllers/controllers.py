@@ -36,6 +36,49 @@ class ApiController(http.Controller):
         
     #     return self.readUnsyncData(indexes)
 
+    @http.route('/api_controller/api_controller/get_master_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
+    def list(self, **data):
+        _logger = logging.getLogger(__name__)
+        masterDataList = [
+            {
+                'name': 'res.partner'
+            },
+            {
+                'name': 'fleet.vehicle.state'
+            },
+            {
+                'name': 'fleet.vehicle.model.category'
+            },
+            {
+                'name': 'fleet.vehicle.model.brand'
+            },
+            {
+                'name': 'fleet.vehicle'
+            },
+        ]
+
+        for masterData in masterDataList:
+            masterData.data = http.request.env[masterData.name].search_read()
+
+        _logger.info(masterData)
+        
+        return masterData
+    
+    def mapValueToProcessable(indexes):
+        for index in indexes:
+            for vehicle in index.get('data'):
+                for x in vehicle:
+                    try:
+                        vehicle[x] = str(vehicle[x], "utf-8")
+                    finally:
+                        if type(vehicle[x]) == tuple:
+                            if len(vehicle[x]) > 0:
+                                vehicle[x] = vehicle[x][0]
+                            else:
+                                vehicle[x] = None
+                        continue
+        return indexes
+
     @http.route('/api_controller/api_controller/sync_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
     def list(self, **data):
         _logger = logging.getLogger(__name__)

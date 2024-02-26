@@ -25,8 +25,8 @@ class api_controller(models.Model):
         _logger = logging.getLogger(__name__)
 
         parameter = {
-            "db": "sanddelivery",
-            "login": "admin",
+            "db": "sddb",
+            "login": "techadmin",
             "password": "123asdASD!@#",    
         }
 
@@ -35,7 +35,7 @@ class api_controller(models.Model):
         _logger.info(data)
 
         headers = {'Content-type': 'application/json'}      
-        AUTH_URL = "http://localhost:8069/web/session/authenticate/"
+        AUTH_URL = "http://3.26.69.148:8069//web/session/authenticate/"
         data = {
                 "jsonrpc": "2.0",
                 "params": {
@@ -47,7 +47,7 @@ class api_controller(models.Model):
                 }  
         res = requests.post(AUTH_URL, data=json.dumps(data, default=str),headers=headers)
         session_id = res.cookies["session_id"]
-        base_url = "localhost:8069/api_controller/api_controller/sync_data" # your api 
+        base_url = "3.26.69.148:8069//api_controller/api_controller/get_master_data" # your api 
         json_headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -60,7 +60,7 @@ class api_controller(models.Model):
         response = requests.post("http://{}".format(base_url), data = json.dumps(data, default=str), headers=json_headers, cookies=cookies)
         _logger.info(response.status_code)
         _logger.info(response.json())
-        self.Synced()
+        # self.Synced()
         # self.updateData(response.json().get('result'), True)
         return True
     
