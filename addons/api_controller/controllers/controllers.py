@@ -36,7 +36,7 @@ class ApiController(http.Controller):
         
     #     return self.readUnsyncData(indexes)
 
-    @http.route('/api_controller/api_controller/get_master_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
+    @http.route('/api_controller/api_controller/sync_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
     def listData(self, **data):
         _logger = logging.getLogger(__name__)
         masterDataList = [
@@ -84,7 +84,7 @@ class ApiController(http.Controller):
                         continue
         return indexes
 
-    @http.route('/api_controller/api_controller/sync_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
+    @http.route('/api_controller/api_controller/sync_data_2', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
     def list(self, **data):
         _logger = logging.getLogger(__name__)
         manufacturerId = 0
