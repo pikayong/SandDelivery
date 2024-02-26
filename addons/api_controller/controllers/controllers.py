@@ -69,7 +69,7 @@ class ApiController(http.Controller):
         
         return self.mapValueToProcessable(masterDataList)
     
-    def mapValueToProcessable(indexes):
+    def mapValueToProcessable(self, indexes):
         for index in indexes:
             for vehicle in index.get('data'):
                 for x in vehicle:
