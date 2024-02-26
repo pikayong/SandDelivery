@@ -42,32 +42,32 @@ class ApiController(http.Controller):
         masterDataList = [
             {
                 'name': 'res.partner',
-                'datasets': http.request.env['res.partner'].search_read([])
+                'env': http.request.env['res.partner']
             },
             {
                 'name': 'fleet.vehicle.state',
-                'datasets': http.request.env['fleet.vehicle.state'].search_read([])
+                'env': http.request.env['fleet.vehicle.state']
             },
             {
                 'name': 'fleet.vehicle.model.category',
-                'datasets': http.request.env['fleet.vehicle.model.category'].search_read([])
+                'env': http.request.env['fleet.vehicle.model.category']
             },
             {
                 'name': 'fleet.vehicle.model.brand',
-                'datasets': http.request.env['fleet.vehicle.model.brand'].search_read([])
+                'env': http.request.env['fleet.vehicle.model.brand']
             },
             {
                 'name': 'fleet.vehicle',
-                'datasets': http.request.env['fleet.vehicle'].search_read([])
+                'env': http.request.env['fleet.vehicle']
             },
         ]
 
-        # for masterData in masterDataList:
-        #     masterData['datasets'] = http.request.env[masterData.name].search_read()
+        for masterData in masterDataList:
+            masterData['data'] = masterData.env.search_read([])
 
         _logger.info(masterDataList)
         
-        return masterDataList
+        return self.mapValueToProcessable(masterDataList)
     
     def mapValueToProcessable(indexes):
         for index in indexes:
