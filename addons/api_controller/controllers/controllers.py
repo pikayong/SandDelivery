@@ -37,7 +37,7 @@ class ApiController(http.Controller):
     #     return self.readUnsyncData(indexes)
 
     @http.route('/api_controller/api_controller/get_master_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
-    def list(self, **data):
+    def listData(self, **data):
         _logger = logging.getLogger(__name__)
         masterDataList = [
             {
