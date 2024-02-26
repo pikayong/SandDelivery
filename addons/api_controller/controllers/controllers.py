@@ -42,23 +42,23 @@ class ApiController(http.Controller):
         masterDataList = [
             {
                 'name': 'res.partner',
-                'datasets': http.request.env['res.partner'].search_read()
+                'datasets': http.request.env['res.partner'].search_read([])
             },
             {
                 'name': 'fleet.vehicle.state',
-                'datasets': http.request.env['fleet.vehicle.state'].search_read()
+                'datasets': http.request.env['fleet.vehicle.state'].search_read([])
             },
             {
                 'name': 'fleet.vehicle.model.category',
-                'datasets': http.request.env['fleet.vehicle.model.category'].search_read()
+                'datasets': http.request.env['fleet.vehicle.model.category'].search_read([])
             },
             {
                 'name': 'fleet.vehicle.model.brand',
-                'datasets': http.request.env['fleet.vehicle.model.brand'].search_read()
+                'datasets': http.request.env['fleet.vehicle.model.brand'].search_read([])
             },
             {
                 'name': 'fleet.vehicle',
-                'datasets': http.request.env['fleet.vehicle'].search_read()
+                'datasets': http.request.env['fleet.vehicle'].search_read([])
             },
         ]
 
