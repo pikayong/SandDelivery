@@ -38,6 +38,8 @@ class ApiController(http.Controller):
 
     @http.route('/api_controller/api_controller/sync_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
     def listData(self, **data):
+        # data include login password db data (total 4 properties), only data is needed
+        data = data.get('data')
         _logger = logging.getLogger(__name__)
 
         _logger.info(data)
