@@ -39,6 +39,19 @@ class ApiController(http.Controller):
     @http.route('/api_controller/api_controller/sync_data', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
     def listData(self, **data):
         _logger = logging.getLogger(__name__)
+
+        # get trips data
+        data_trips = data.get('trips')
+
+        if len(data_trips) > 0: 
+            for trip in data_trips:
+                trip['synced'] = 1
+                existingTrip = http.request.env['fleet.vehicle.trip'].search([('name', '=', trip.get('name'))])
+                if existingTrip:
+                    existingTrip.write(trip)
+                else:
+                    newTrips = http.request.env['fleet.vehicle.trip'].sudo().create(trip)
+
         masterDataList = [
             {
                 'name': 'res.partner',
@@ -64,25 +77,26 @@ class ApiController(http.Controller):
 
         for masterData in masterDataList:
             masterData['data'] = masterData.get('env').search_read([])
+            del masterData['env']
 
         _logger.info(masterDataList)
         
         return self.mapValueToProcessable(masterDataList)
     
-    def mapValueToProcessable(self, indexes):
-        for index in indexes:
-            for vehicle in index.get('data'):
-                for x in vehicle:
+    def mapValueToProcessable(self, masterDataList):
+        for masterData in masterDataList:
+            for data in masterData.get('data'):
+                for x in data:
                     try:
-                        vehicle[x] = str(vehicle[x], "utf-8")
+                        data[x] = str(data[x], "utf-8")
                     finally:
-                        if type(vehicle[x]) == tuple:
-                            if len(vehicle[x]) > 0:
-                                vehicle[x] = vehicle[x][0]
+                        if type(data[x]) == tuple:
+                            if len(data[x]) > 0:
+                                data[x] = data[x][0]
                             else:
-                                vehicle[x] = None
+                                data[x] = None
                         continue
-        return indexes
+        return masterDataList
 
     @http.route('/api_controller/api_controller/sync_data_2', auth='user', type='json', methods=['POST'], cors='*', csrf=False)
     def list(self, **data):
