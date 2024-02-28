@@ -40,6 +40,7 @@ class ApiController(http.Controller):
     def listData(self, **data):
         _logger = logging.getLogger(__name__)
 
+        _logger.info(data)
         # get trips data
         data_trips = data.get('trips')
 
@@ -81,7 +82,7 @@ class ApiController(http.Controller):
 
         _logger.info(masterDataList)
         
-        return self.mapValueToProcessable(masterDataList)
+        return self.mapValueToProcessable(masterDataList) 
     
     def mapValueToProcessable(self, masterDataList):
         for masterData in masterDataList:
