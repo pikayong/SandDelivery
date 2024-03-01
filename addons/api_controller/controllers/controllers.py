@@ -58,7 +58,7 @@ class ApiController(http.Controller):
         masterDataList = self.masterDataList()
 
         for masterData in masterDataList:
-            masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1)])
+            masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)])
             del masterData['env']
 
         _logger.info(masterDataList)
@@ -90,6 +90,10 @@ class ApiController(http.Controller):
             {
                 'name': 'fleet.vehicle',
                 'env': http.request.env['fleet.vehicle']
+            },
+            {
+                'name': 'fleet.vehicle.trip.master',
+                'env': http.request.env['fleet.vehicle.trip.master']
             },
         ]
     

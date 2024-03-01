@@ -35,7 +35,7 @@ class api_controller(models.Model):
         _logger.info(data)
 
         headers = {'Content-type': 'application/json'}      
-        AUTH_URL = "http://3.26.69.148:8069//web/session/authenticate/"
+        AUTH_URL = "http://3.26.69.148:8069/web/session/authenticate/"
         data = {
                 "jsonrpc": "2.0",
                 "params": {
@@ -46,22 +46,24 @@ class api_controller(models.Model):
                     }
                 }  
         res = requests.post(AUTH_URL, data=json.dumps(data, default=str),headers=headers)
+        _logger.info(res)
+        _logger.info(res.cookies["session_id"])
         session_id = res.cookies["session_id"]
-        base_url = "3.26.69.148:8069//api_controller/api_controller/get_master_data" # your api 
+        base_url = "3.26.69.148:8069/api_controller/api_controller/sync_data" # your api 
         json_headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             }
         cookies = {
-            'login': "admin", 
+            'login': "techadmin", 
             'password': '123asdASD!@#',
             'session_id':session_id
             }
         response = requests.post("http://{}".format(base_url), data = json.dumps(data, default=str), headers=json_headers, cookies=cookies)
         _logger.info(response.status_code)
-        _logger.info(response.json())
+        _logger.info(response.json().get('result'))
         # self.Synced()
-        # self.updateData(response.json().get('result'), True)
+        self.updateMasterData(response.json().get('result'))
         return True
     
     def getData(self):
@@ -87,8 +89,9 @@ class api_controller(models.Model):
             # 'categories': list(filter(lambda x: x.get('name') == 'categories', indexes))[0].get('data'),
             # 'models': list(filter(lambda x: x.get('name') == 'models', indexes))[0].get('data'),
             # 'vehicles': list(filter(lambda x: x.get('name') == 'vehicles', indexes))[0].get('data'),
-            'odometers': list(filter(lambda x: x.get('name') == 'odometers', indexes))[0].get('data'),
-            'petrols': list(filter(lambda x: x.get('name') == 'petrols', indexes))[0].get('data'),
+            # 'odometers': list(filter(lambda x: x.get('name') == 'odometers', indexes))[0].get('data'),
+            # 'petrols': list(filter(lambda x: x.get('name') == 'petrols', indexes))[0].get('data'),
+            'trips': list(filter(lambda x: x.get('name') == 'trips', indexes))[0].get('data'),
         }
         
         testServerSideResult = {
@@ -99,6 +102,20 @@ class api_controller(models.Model):
         }
         _logger.info(result)
         return result
+    
+    def updateMasterData(self, data):
+        _logger = logging.getLogger(__name__)
+        for item in data:
+            masterData = list(filter(lambda x: x.get('name') == item.get('name'), self.masterDataList()))
+            if (len(masterData) > 0):
+                env = masterData[0].get('env')
+                recordsData = item.get('data')
+                for recordData in recordsData:
+                    existingRecord = env.search([('name', '=', recordData.get('name'))])
+                    if existingRecord:
+                        existingRecord.write(recordData)
+                    else:
+                        newRecord = env.sudo().create(recordData)
     
     def searchReadDataProcessing(self, data):
         for vehicle in data:
@@ -114,8 +131,6 @@ class api_controller(models.Model):
                         else:
                             vehicle[x] = None
                     continue
-            vehicle['license_plate'] = http.request.env['fleet.vehicle'].search([('id', '=', vehicle['vehicle_id'][0])]).license_plate
-            vehicle['driver_id'][1] = 'Nobody'
         return data
     
     def Synced(self):
@@ -372,13 +387,45 @@ class api_controller(models.Model):
             #     'name': 'vehicles',
             #     'data': http.request.env['fleet.vehicle'].search_read([('synced', '!=', 1)])
             # },
+            # {
+            #     'name': 'odometers',
+            #     'data': http.request.env['fleet.vehicle.odometer'].search_read([('synced', '!=', 1)])
+            # },
+            # {
+            #     'name': 'petrols',
+            #     'data': http.request.env['fleet.vehicle.petrol'].search_read([('synced', '!=', 1)])
+            # },
             {
-                'name': 'odometers',
-                'data': http.request.env['fleet.vehicle.odometer'].search_read([('synced', '!=', 1)])
+                'name': 'trips',
+                'data': http.request.env['fleet.vehicle.trip'].search_read([('synced', '!=', 1)])
+            },
+        ]
+        
+    def masterDataList(self):
+        return [
+            {
+                'name': 'res.partner',
+                'env': http.request.env['res.partner']
             },
             {
-                'name': 'petrols',
-                'data': http.request.env['fleet.vehicle.petrol'].search_read([('synced', '!=', 1)])
+                'name': 'fleet.vehicle.state',
+                'env': http.request.env['fleet.vehicle.state']
+            },
+            {
+                'name': 'fleet.vehicle.model.category',
+                'env': http.request.env['fleet.vehicle.model.category']
+            },
+            {
+                'name': 'fleet.vehicle.model.brand',
+                'env': http.request.env['fleet.vehicle.model.brand']
+            },
+            {
+                'name': 'fleet.vehicle.model',
+                'env': http.request.env['fleet.vehicle.model']
+            },
+            {
+                'name': 'fleet.vehicle',
+                'env': http.request.env['fleet.vehicle']
             },
         ]
 
