@@ -45,7 +45,19 @@ class api_controller(models.Model):
                         "data": data
                     }
                 }  
-        res = requests.post(AUTH_URL, data=json.dumps(data, default=str),headers=headers)
+        try:
+            res = requests.post(AUTH_URL, data=json.dumps(data, default=str),headers=headers)
+        except requests.exceptions.RequestException as e: 
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': ('Internet connection issue. Please check your connection. '),
+                    'message': 'Something went wrong with the connection, please check your Wifi is connecting normally',
+                    'type':'error',  #types: success,warning,danger,info
+                    'sticky': False,  #True/False will display for few seconds if false
+                },
+            }
         _logger.info(res)
         _logger.info(res.cookies["session_id"])
         session_id = res.cookies["session_id"]
@@ -64,7 +76,16 @@ class api_controller(models.Model):
         _logger.info(response.json().get('result'))
         # self.Synced()
         self.updateMasterData(response.json().get('result'))
-        return True
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': ('Synchronize Successfully'),
+                'message': 'You have successfully synchronized with the cloud',
+                'type':'success',  #types: success,warning,danger,info
+                'sticky': False,  #True/False will display for few seconds if false
+            },
+        }
     
     def getData(self):
         _logger = logging.getLogger(__name__)
@@ -106,16 +127,26 @@ class api_controller(models.Model):
     def updateMasterData(self, data):
         _logger = logging.getLogger(__name__)
         for item in data:
+            _logger.info('updating ' + item.get('name'))
             masterData = list(filter(lambda x: x.get('name') == item.get('name'), self.masterDataList()))
+            _logger.info('masterData')
+            _logger.info( masterData)
             if (len(masterData) > 0):
                 env = masterData[0].get('env')
                 recordsData = item.get('data')
-                for recordData in recordsData:
-                    existingRecord = env.search([('name', '=', recordData.get('name'))])
+                _logger.info('recordsData ')
+                _logger.info(recordsData)
+                for rawrecordData in recordsData:
+                    recordData = self.getObjectForCRUD(rawrecordData, item.get('name'))
+                    existingRecord = env.search([('id', '=', recordData.get('id'))])
+                    _logger.info('existingRecord ')
+                    _logger.info(existingRecord)
                     if existingRecord:
                         existingRecord.write(recordData)
                     else:
                         newRecord = env.sudo().create(recordData)
+                    if not item.get('create_multi'):
+                        self.env.cr.commit()
     
     def searchReadDataProcessing(self, data):
         for vehicle in data:
@@ -254,119 +285,155 @@ class api_controller(models.Model):
         return data
 
     # Models
-    def getVehicle(self, raw_vehicle, obj_name):
+    def getObjectForCRUD(self, raw_data, obj_name):
         _logger = logging.getLogger(__name__)
-        # if obj_name == 'vehicles':
-        #     return {
-        #         'id': raw_vehicle.get('id'),
-        #         'state_id': raw_vehicle.get('state_id'),
-        #         'company_id': raw_vehicle.get('company_id'),
-        #         'synced': raw_vehicle.get('synced'),
-        #         'model_id': raw_vehicle.get('model_id'),
-        #         'license_plate': raw_vehicle.get('license_plate'),
-        #         'tag_ids': raw_vehicle.get('tag_ids'),
-        #         'active': raw_vehicle.get('active'),
-        #         'driver_id': raw_vehicle.get('driver_id'),
-        #         'future_driver_id': raw_vehicle.get('future_driver_id'),
-        #         'plan_to_change_car': raw_vehicle.get('plan_to_change_car'),
-        #         'plan_to_change_bike': raw_vehicle.get('plan_to_change_bike'),
-        #         'next_assignation_date': raw_vehicle.get('next_assignation_date'),
-        #         'category_id': raw_vehicle.get('category_id'),
-        #         'order_date': raw_vehicle.get('order_date'),
-        #         'acquisition_date': raw_vehicle.get('acquisition_date'),
-        #         'write_off_date': raw_vehicle.get('write_off_date'),
-        #         'vin_sn': raw_vehicle.get('vin_sn'),
-        #         'odometer': raw_vehicle.get('odometer'),
-        #         'odometer_unit': raw_vehicle.get('odometer_unit'),
-        #         'manager_id': raw_vehicle.get('manager_id'),
-        #         'location': raw_vehicle.get('location'),
-        #         'vehicle_properties': raw_vehicle.get('vehicle_properties'),
-        #         'horsepower_tax': raw_vehicle.get('horsepower_tax'),
-        #         'first_contract_date': raw_vehicle.get('first_contract_date'),
-        #         'car_value': raw_vehicle.get('car_value'),
-        #         'net_car_value': raw_vehicle.get('net_car_value'),
-        #         'residual_value': raw_vehicle.get('residual_value'),
-        #         'model_year': raw_vehicle.get('model_year'),
-        #         'transmission': raw_vehicle.get('transmission'),
-        #         'color': raw_vehicle.get('color'),
-        #         'seats': raw_vehicle.get('seats'),
-        #         'doors': raw_vehicle.get('doors'),
-        #         'trailer_hook': raw_vehicle.get('trailer_hook'),
-        #         'frame_type': raw_vehicle.get('frame_type'),
-        #         'frame_size': raw_vehicle.get('frame_size'),
-        #         'electric_assistance': raw_vehicle.get('electric_assistance'),
-        #         'horsepower': raw_vehicle.get('horsepower'),
-        #         'power': raw_vehicle.get('power'),
-        #         'fuel_type': raw_vehicle.get('fuel_type'),
-        #         'co2': raw_vehicle.get('co2'),
-        #         'co2_standard': raw_vehicle.get('co2_standard'),
-        #         'description': raw_vehicle.get('description'),
-        #         'driver_employee_id': raw_vehicle.get('driver_employee_id'),
-        #         'future_driver_employee_id': raw_vehicle.get('future_driver_employee_id'),
-        #     }
-        # if obj_name == 'manufacturers':
-        #     return {
-        #         'id': raw_vehicle.get('id'),
-        #         'name': raw_vehicle.get('name'),
-        #         'active': raw_vehicle.get('active'),
-        #     }
-        # if obj_name == 'categories':
-        #     return {
-        #         'id': raw_vehicle.get('id'),
-        #         'name': raw_vehicle.get('name'),
-        #         'sequence': raw_vehicle.get('sequence'),
-        #     }
-        # if obj_name == 'models':
-        #     return {
-        #         'id': raw_vehicle.get('id'),
-        #         'name': raw_vehicle.get('name'),
-        #         'brand_id': raw_vehicle.get('brand_id'),
-        #         'category_id': raw_vehicle.get('category_id'),
-        #         'vehicle_type': raw_vehicle.get('vehicle_type'),
-        #         'transmission': raw_vehicle.get('transmission'),
-        #         'model_year': raw_vehicle.get('model_year'),
-        #         'color': raw_vehicle.get('color'),
-        #         'seats': raw_vehicle.get('seats'),
-        #         'doors': raw_vehicle.get('doors'),
-        #         'trailer_hook': raw_vehicle.get('trailer_hook'),
-        #         'default_co2': raw_vehicle.get('default_co2'),
-        #         'co2_standard': raw_vehicle.get('co2_standard'),
-        #         'default_fuel_type': raw_vehicle.get('default_fuel_type'),
-        #         'power': raw_vehicle.get('power'),
-        #         'horsepower': raw_vehicle.get('horsepower'),
-        #         'horsepower_tax': raw_vehicle.get('horsepower_tax'),
-        #         'electric_assistance': raw_vehicle.get('electric_assistance'),
-        #         'vehicle_properties_definition': raw_vehicle.get('vehicle_properties_definition'),
-        #         'synced': raw_vehicle.get('synced'),
-        #         'active': raw_vehicle.get('active'),
-        #     }
-        if obj_name == 'odometers':
+        if obj_name == 'fleet.vehicle':
             return {
-                'id': raw_vehicle.get('id'),
-                'name': raw_vehicle.get('name'),
-                'datetime': raw_vehicle.get('datetime'),
-                'odometer_start': raw_vehicle.get('odometer_start'),
-                'odometer_end': raw_vehicle.get('odometer_end'),
-                'bucket_amount': raw_vehicle.get('bucket_amount'),
-                'loading_weight': raw_vehicle.get('loading_weight'),
-                'total': raw_vehicle.get('total'),
-                'value': raw_vehicle.get('value'),
-                'vehicle_id': raw_vehicle.get('vehicle_id'),
-                'unit': raw_vehicle.get('unit'),
-                'driver_id': raw_vehicle.get('driver_id'),
-                'synced': raw_vehicle.get('synced'),
+                'id': raw_data.get('id'),
+                'state_id': raw_data.get('state_id'),
+                'company_id': raw_data.get('company_id'),
+                'synced': raw_data.get('synced'),
+                'model_id': raw_data.get('model_id'),
+                'license_plate': raw_data.get('license_plate'),
+                'tag_ids': raw_data.get('tag_ids'),
+                'active': raw_data.get('active'),
+                'driver_id': raw_data.get('driver_id'),
+                'future_driver_id': raw_data.get('future_driver_id'),
+                'plan_to_change_car': raw_data.get('plan_to_change_car'),
+                'plan_to_change_bike': raw_data.get('plan_to_change_bike'),
+                'next_assignation_date': raw_data.get('next_assignation_date'),
+                'category_id': raw_data.get('category_id'),
+                'order_date': raw_data.get('order_date'),
+                'acquisition_date': raw_data.get('acquisition_date'),
+                'write_off_date': raw_data.get('write_off_date'),
+                'vin_sn': raw_data.get('vin_sn'),
+                'odometer': raw_data.get('odometer'),
+                'initial_odometer': raw_data.get('initial_odometer'),
+                'odometer_unit': raw_data.get('odometer_unit'),
+                'manager_id': raw_data.get('manager_id'),
+                'location': raw_data.get('location'),
+                'vehicle_properties': raw_data.get('vehicle_properties'),
+                'horsepower_tax': raw_data.get('horsepower_tax'),
+                'first_contract_date': raw_data.get('first_contract_date'),
+                'car_value': raw_data.get('car_value'),
+                'net_car_value': raw_data.get('net_car_value'),
+                'residual_value': raw_data.get('residual_value'),
+                'model_year': raw_data.get('model_year'),
+                'transmission': raw_data.get('transmission'),
+                'color': raw_data.get('color'),
+                'seats': raw_data.get('seats'),
+                'doors': raw_data.get('doors'),
+                'trailer_hook': raw_data.get('trailer_hook'),
+                'frame_type': raw_data.get('frame_type'),
+                'frame_size': raw_data.get('frame_size'),
+                'electric_assistance': raw_data.get('electric_assistance'),
+                'horsepower': raw_data.get('horsepower'),
+                'power': raw_data.get('power'),
+                'fuel_type': raw_data.get('fuel_type'),
+                'co2': raw_data.get('co2'),
+                'co2_standard': raw_data.get('co2_standard'),
+                'description': raw_data.get('description'),
+                'driver_employee_id': raw_data.get('driver_employee_id'),
+                'future_driver_employee_id': raw_data.get('future_driver_employee_id'),
             }
-        if obj_name == 'petrols':
+        if obj_name == 'fleet.vehicle.model.brand':
             return {
-                'id': raw_vehicle.get('id'),
-                'name': raw_vehicle.get('name'),
-                'datetime': raw_vehicle.get('datetime'),
-                'odometer': raw_vehicle.get('odometer'),
-                'petrol': raw_vehicle.get('petrol'),
-                'vehicle_id': raw_vehicle.get('vehicle_id'),
-                'driver_id': raw_vehicle.get('driver_id'),
-                'synced': raw_vehicle.get('synced'),
+                'id': raw_data.get('id'),
+                'name': raw_data.get('name'),
+                'active': raw_data.get('active'),
             }
+        if obj_name == 'fleet.vehicle.model.category':
+            return {
+                'id': raw_data.get('id'),
+                'name': raw_data.get('name'),
+                'sequence': raw_data.get('sequence'),
+            }
+        if obj_name == 'fleet.vehicle.model':
+            return {
+                'id': raw_data.get('id'),
+                'name': raw_data.get('name'),
+                'brand_id': raw_data.get('brand_id'),
+                'category_id': raw_data.get('category_id'),
+                'vehicle_type': raw_data.get('vehicle_type'),
+                'transmission': raw_data.get('transmission'),
+                'model_year': raw_data.get('model_year'),
+                'color': raw_data.get('color'),
+                'seats': raw_data.get('seats'),
+                'doors': raw_data.get('doors'),
+                'trailer_hook': raw_data.get('trailer_hook'),
+                'default_co2': raw_data.get('default_co2'),
+                'co2_standard': raw_data.get('co2_standard'),
+                'default_fuel_type': raw_data.get('default_fuel_type'),
+                'power': raw_data.get('power'),
+                'horsepower': raw_data.get('horsepower'),
+                'horsepower_tax': raw_data.get('horsepower_tax'),
+                'electric_assistance': raw_data.get('electric_assistance'),
+                'vehicle_properties_definition': raw_data.get('vehicle_properties_definition'),
+                'synced': raw_data.get('synced'),
+                'active': raw_data.get('active'),
+            }
+        if obj_name == 'res.partner':
+            return {
+                'id': raw_data.get('id'),
+                'name': raw_data.get('name'),
+                'type': raw_data.get('type'),
+                'street': raw_data.get('street'),
+                'street2': raw_data.get('street2'),
+                'zip': raw_data.get('zip'),
+                'city': raw_data.get('city'),
+                'state_id': raw_data.get('state_id'),
+                'country_id': raw_data.get('country_id'),
+                'function': raw_data.get('function'),
+                'vat': raw_data.get('vat'),
+                'phone': raw_data.get('phone'),
+                'mobile': raw_data.get('mobile'),
+                'email': raw_data.get('email'),
+                'title': raw_data.get('title'),
+                'active': raw_data.get('active'),
+            }
+        if obj_name == 'fleet.vehicle.state':
+            return {
+                'id': raw_data.get('id'),
+                'name': raw_data.get('name'),
+                'sequence': raw_data.get('sequence'),
+                'visibility': raw_data.get('visibility'),
+            }
+        if obj_name == 'fleet.vehicle.trip.master':
+            return {
+                'id': raw_data.get('id'),
+                'name': raw_data.get('name'),
+                'distance': raw_data.get('distance'),
+                'price': raw_data.get('price'),
+                'bucket': raw_data.get('bucket'),
+                'weight': raw_data.get('weight'),
+            }
+        # if obj_name == 'odometers':
+        #     return {
+        #         'id': raw_data.get('id'),
+        #         'name': raw_data.get('name'),
+        #         'datetime': raw_data.get('datetime'),
+        #         'odometer_start': raw_data.get('odometer_start'),
+        #         'odometer_end': raw_data.get('odometer_end'),
+        #         'bucket_amount': raw_data.get('bucket_amount'),
+        #         'loading_weight': raw_data.get('loading_weight'),
+        #         'total': raw_data.get('total'),
+        #         'value': raw_data.get('value'),
+        #         'vehicle_id': raw_data.get('vehicle_id'),
+        #         'unit': raw_data.get('unit'),
+        #         'driver_id': raw_data.get('driver_id'),
+        #         'synced': raw_data.get('synced'),
+        #     }
+        # if obj_name == 'petrols':
+        #     return {
+        #         'id': raw_data.get('id'),
+        #         'name': raw_data.get('name'),
+        #         'datetime': raw_data.get('datetime'),
+        #         'odometer': raw_data.get('odometer'),
+        #         'petrol': raw_data.get('petrol'),
+        #         'vehicle_id': raw_data.get('vehicle_id'),
+        #         'driver_id': raw_data.get('driver_id'),
+        #         'synced': raw_data.get('synced'),
+        #     }
         return {}
     
     def getIndexes_getList(self):
@@ -405,31 +472,38 @@ class api_controller(models.Model):
         return [
             {
                 'name': 'res.partner',
-                'env': http.request.env['res.partner']
+                'env': http.request.env['res.partner'],
+                'create_multi': False
             },
             {
                 'name': 'fleet.vehicle.state',
-                'env': http.request.env['fleet.vehicle.state']
+                'env': http.request.env['fleet.vehicle.state'],
+                'create_multi': False
             },
             {
                 'name': 'fleet.vehicle.model.category',
-                'env': http.request.env['fleet.vehicle.model.category']
+                'env': http.request.env['fleet.vehicle.model.category'],
+                'create_multi': False
             },
             {
                 'name': 'fleet.vehicle.model.brand',
-                'env': http.request.env['fleet.vehicle.model.brand']
+                'env': http.request.env['fleet.vehicle.model.brand'],
+                'create_multi': False
             },
             {
                 'name': 'fleet.vehicle.model',
-                'env': http.request.env['fleet.vehicle.model']
+                'env': http.request.env['fleet.vehicle.model'],
+                'create_multi': False
             },
             {
                 'name': 'fleet.vehicle',
-                'env': http.request.env['fleet.vehicle']
+                'env': http.request.env['fleet.vehicle'],
+                'create_multi': True
             },
             {
                 'name': 'fleet.vehicle.trip.master',
-                'env': http.request.env['fleet.vehicle.trip.master']
+                'env': http.request.env['fleet.vehicle.trip.master'],
+                'create_multi': False
             },
         ]
 
