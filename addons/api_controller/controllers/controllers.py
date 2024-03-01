@@ -55,7 +55,7 @@ class ApiController(http.Controller):
                 else:
                     newTrips = http.request.env['fleet.vehicle.trip'].sudo().create(trip)
 
-        masterDataList = http.request.env['api_controller.api_controller'].masterDataList()
+        masterDataList = self.masterDataList()
 
         for masterData in masterDataList:
             masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1)])
@@ -64,6 +64,34 @@ class ApiController(http.Controller):
         _logger.info(masterDataList)
         
         return self.mapValueToProcessable(masterDataList) 
+        
+    def masterDataList(self):
+        return [
+            {
+                'name': 'res.partner',
+                'env': http.request.env['res.partner']
+            },
+            {
+                'name': 'fleet.vehicle.state',
+                'env': http.request.env['fleet.vehicle.state']
+            },
+            {
+                'name': 'fleet.vehicle.model.category',
+                'env': http.request.env['fleet.vehicle.model.category']
+            },
+            {
+                'name': 'fleet.vehicle.model.brand',
+                'env': http.request.env['fleet.vehicle.model.brand']
+            },
+            {
+                'name': 'fleet.vehicle.model',
+                'env': http.request.env['fleet.vehicle.model']
+            },
+            {
+                'name': 'fleet.vehicle',
+                'env': http.request.env['fleet.vehicle']
+            },
+        ]
     
     def mapValueToProcessable(self, masterDataList):
         for masterData in masterDataList:
