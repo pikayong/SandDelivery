@@ -427,6 +427,10 @@ class api_controller(models.Model):
                 'name': 'fleet.vehicle',
                 'env': http.request.env['fleet.vehicle']
             },
+            {
+                'name': 'fleet.vehicle.trip.master',
+                'env': http.request.env['fleet.vehicle.trip.master']
+            },
         ]
 
     def getIndexes_withReqEnv(self, data):

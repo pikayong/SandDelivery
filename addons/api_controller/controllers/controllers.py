@@ -55,7 +55,7 @@ class ApiController(http.Controller):
                 else:
                     newTrips = http.request.env['fleet.vehicle.trip'].sudo().create(trip)
 
-        masterDataList = self.masterDataList()
+        masterDataList = http.request.env['api_controller.api_controller'].masterDataList()
 
         for masterData in masterDataList:
             masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)])
