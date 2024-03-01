@@ -55,31 +55,10 @@ class ApiController(http.Controller):
                 else:
                     newTrips = http.request.env['fleet.vehicle.trip'].sudo().create(trip)
 
-        masterDataList = [
-            {
-                'name': 'res.partner',
-                'env': http.request.env['res.partner']
-            },
-            {
-                'name': 'fleet.vehicle.state',
-                'env': http.request.env['fleet.vehicle.state']
-            },
-            {
-                'name': 'fleet.vehicle.model.category',
-                'env': http.request.env['fleet.vehicle.model.category']
-            },
-            {
-                'name': 'fleet.vehicle.model.brand',
-                'env': http.request.env['fleet.vehicle.model.brand']
-            },
-            {
-                'name': 'fleet.vehicle',
-                'env': http.request.env['fleet.vehicle']
-            },
-        ]
+        masterDataList = http.request.env['api_controller.api_controller'].masterDataList()
 
         for masterData in masterDataList:
-            masterData['data'] = masterData.get('env').search_read([])
+            masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1)])
             del masterData['env']
 
         _logger.info(masterDataList)
