@@ -5,6 +5,7 @@ import base64
 import collections
 import datetime
 import hashlib
+import logging
 import pytz
 import threading
 import re
@@ -729,6 +730,7 @@ class Partner(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        _logger = logging.getLogger(__name__)
         if self.env.context.get('import_file'):
             self._check_import_consistency(vals_list)
         for vals in vals_list:
@@ -736,6 +738,7 @@ class Partner(models.Model):
                 vals['website'] = self._clean_website(vals['website'])
             if vals.get('parent_id'):
                 vals['company_name'] = False
+        _logger.info(vals_list)
         partners = super(Partner, self).create(vals_list)
 
         if self.env.context.get('_partners_skip_fields_sync'):
