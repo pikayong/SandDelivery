@@ -145,6 +145,12 @@ class api_controller(models.Model):
                                 data[x] = None
                         if x == 'synced':
                             data[x] = True
+                        if x == 'vehicle_id':
+                            data[x] = http.request.env['fleet.vehicle'].search([('id', '=', data[x])]).ex_id
+                        if x == 'driver_id':
+                            data[x] = http.request.env['res.partner'].search([('id', '=', data[x])]).ex_id
+                        if x == 'trip_id':
+                            data[x] = http.request.env['fleet.vehicle.trip.master'].search([('id', '=', data[x])]).ex_id
                         continue
         return masterDataList
     
@@ -173,15 +179,15 @@ class api_controller(models.Model):
                 _logger.info('recordsData ')
                 _logger.info(recordsData)
                 for rawrecordData in recordsData:
-                    recordData = self.getObjectForCRUD(rawrecordData, item.get('name'))
-                    existingRecord = env.search([('id', '=', recordData.get('id'))])
+                    recordData = self.getObjectForCRUD(rawrecordData, item.get('name'), False)
+                    existingRecord = env.search([('name', '=', recordData.get('name'))])
                     _logger.info('existingRecord ')
                     _logger.info(existingRecord)
                     if existingRecord:
                         existingRecord.write(recordData)
                     else:
                         newRecord = env.sudo().create(recordData)
-                    if not item.get('create_multi'):
+                    if item.get('create_multi') == False:
                         self.env.cr.commit()
         return {
             'type': 'ir.actions.client',
@@ -335,24 +341,33 @@ class api_controller(models.Model):
         return data
 
     # Models
-    def getObjectForCRUD(self, raw_data, obj_name):
+    def getObjectForCRUD(self, raw_data, obj_name, isUpToServer):
         _logger = logging.getLogger(__name__)
+        model_env = http.request.env['fleet.vehicle.model']
+        brand_env = http.request.env['fleet.vehicle.model.brand']
+        vehicle_env = http.request.env['fleet.vehicle']
+        vehicle_category_env = http.request.env['fleet.vehicle.model.category']
+        vehicle_state_env = http.request.env['fleet.vehicle.state']
+        trip_master_env = http.request.env['fleet.vehicle.trip.master']
+        res_partner_env = http.request.env['res.partner']
         if obj_name == 'fleet.vehicle':
             return {
                 'id': raw_data.get('id'),
-                'state_id': raw_data.get('state_id'),
+                'ex_id': raw_data.get('ex_id'),
+                'name': raw_data.get('name'),
+                'state_id': vehicle_state_env.search([('id', '=', raw_data.get('state_id'))]).ex_id if isUpToServer else vehicle_state_env.search([('ex_id', '=', raw_data.get('state_id'))]).id,
                 'company_id': raw_data.get('company_id'),
                 'synced': raw_data.get('synced'),
-                'model_id': raw_data.get('model_id'),
+                'model_id': model_env.search([('id', '=', raw_data.get('model_id'))]).ex_id if isUpToServer else model_env.search([('ex_id', '=', raw_data.get('model_id'))]).id,
                 'license_plate': raw_data.get('license_plate'),
                 'tag_ids': raw_data.get('tag_ids'),
                 'active': raw_data.get('active'),
-                'driver_id': raw_data.get('driver_id'),
+                'driver_id': res_partner_env.search([('id', '=', raw_data.get('driver_id'))]).ex_id if isUpToServer else res_partner_env.search([('ex_id', '=', raw_data.get('driver_id'))]).id,
                 'future_driver_id': raw_data.get('future_driver_id'),
                 'plan_to_change_car': raw_data.get('plan_to_change_car'),
                 'plan_to_change_bike': raw_data.get('plan_to_change_bike'),
                 'next_assignation_date': raw_data.get('next_assignation_date'),
-                'category_id': raw_data.get('category_id'),
+                'category_id': vehicle_category_env.search([('id', '=', raw_data.get('category_id'))]).ex_id if isUpToServer else vehicle_category_env.search([('ex_id', '=', raw_data.get('category_id'))]).id,
                 'order_date': raw_data.get('order_date'),
                 'acquisition_date': raw_data.get('acquisition_date'),
                 'write_off_date': raw_data.get('write_off_date'),
@@ -387,20 +402,23 @@ class api_controller(models.Model):
         if obj_name == 'fleet.vehicle.model.brand':
             return {
                 'id': raw_data.get('id'),
+                'ex_id': raw_data.get('ex_id'),
                 'name': raw_data.get('name'),
                 'active': raw_data.get('active'),
             }
         if obj_name == 'fleet.vehicle.model.category':
             return {
                 'id': raw_data.get('id'),
+                'ex_id': raw_data.get('ex_id'),
                 'name': raw_data.get('name'),
                 'sequence': raw_data.get('sequence'),
             }
         if obj_name == 'fleet.vehicle.model':
             return {
                 'id': raw_data.get('id'),
+                'ex_id': raw_data.get('ex_id'),
                 'name': raw_data.get('name'),
-                'brand_id': raw_data.get('brand_id'),
+                'brand_id': brand_env.search([('id', '=', raw_data.get('brand_id'))]).ex_id if isUpToServer else brand_env.search([('ex_id', '=', raw_data.get('brand_id'))]).id,
                 'category_id': raw_data.get('category_id'),
                 'vehicle_type': raw_data.get('vehicle_type'),
                 'transmission': raw_data.get('transmission'),
@@ -423,6 +441,7 @@ class api_controller(models.Model):
         if obj_name == 'res.partner':
             return {
                 'id': raw_data.get('id'),
+                'ex_id': raw_data.get('ex_id'),
                 'name': raw_data.get('name'),
                 'type': raw_data.get('type'),
                 'street': raw_data.get('street'),
@@ -442,6 +461,7 @@ class api_controller(models.Model):
         if obj_name == 'fleet.vehicle.state':
             return {
                 'id': raw_data.get('id'),
+                'ex_id': raw_data.get('ex_id'),
                 'name': raw_data.get('name'),
                 'sequence': raw_data.get('sequence'),
                 'visibility': raw_data.get('visibility'),
@@ -449,6 +469,7 @@ class api_controller(models.Model):
         if obj_name == 'fleet.vehicle.trip.master':
             return {
                 'id': raw_data.get('id'),
+                'ex_id': raw_data.get('ex_id'),
                 'name': raw_data.get('name'),
                 'distance': raw_data.get('distance'),
                 'price': raw_data.get('price'),
@@ -516,6 +537,7 @@ class api_controller(models.Model):
             },
         ]
         
+    # manual sequence, please add from parent to child accordingly
     def masterDataList(self):
         return [
             {
