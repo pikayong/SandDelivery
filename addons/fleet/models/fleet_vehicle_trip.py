@@ -13,7 +13,7 @@ class FleetVehicleTrip(models.Model):
     _order = 'datetime desc'
 
     name = fields.Char(compute='_compute_vehicle_log_name', store=True)
-    ref_no = fields.Char('Reference No', store=True)
+    ref_no = fields.Char('Reference No', store=True, required=True)
     datetime = fields.Datetime('Date & Time', default=fields.Datetime.now)
     trip_id = fields.Many2one('fleet.vehicle.trip.master', 'Trip', required=True)
     distance = fields.Integer('Distance (km)', compute='_compute_trip_distance', store=True, required=True, readonly=False)
@@ -100,8 +100,7 @@ class FleetVehicleTrip(models.Model):
 
     def quick_sync(self):
         
-        self.env['api_controller.api_controller'].quick_sync()
-        return True
+        return self.env['api_controller.api_controller'].quick_sync()
     
     
     def write(self, vals):

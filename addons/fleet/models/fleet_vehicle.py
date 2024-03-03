@@ -317,6 +317,7 @@ class FleetVehicle(models.Model):
         self._logger.info(vals_list)
         self._logger.info(ptc_values)
         vehicles = super().create(vals_list)
+        self._logger.info(vehicles)
         for vehicle, vals, ptc_value in zip(vehicles, vals_list, ptc_values):
             if ptc_value:
                 vehicle.sudo().write(ptc_value)
@@ -448,5 +449,4 @@ class FleetVehicle(models.Model):
 
     def quick_sync(self):
         
-        self.env['api_controller.api_controller'].quick_sync()
-        return True
+        return self.env['api_controller.api_controller'].quick_sync()

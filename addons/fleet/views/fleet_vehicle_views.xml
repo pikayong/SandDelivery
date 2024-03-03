@@ -427,11 +427,11 @@
                         <group string="Information">
                             <field name="datetime" />
                             <field name="ref_no" />
-                            <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
-                            <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
+                            <field name="vehicle_id" widget="many2one_avatar" options="{'no_create': True, 'no_create_edit':True}"/>
+                            <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar" options="{'no_create': True, 'no_create_edit':True}"/>
                         </group>
                         <group string="Trip Details">
-                            <field name="trip_id"/>
+                            <field name="trip_id" options="{'no_create': True, 'no_create_edit':True}"/>
                             <field name="distance" invisible="not trip_id"/>
                             <field name="price" invisible="not trip_id" />
                             <field name="bucket" invisible="not trip_id" />
@@ -449,11 +449,11 @@
         <field name="model">fleet.vehicle.trip</field>
         <field name="arch" type="xml">
             <tree string="Trip Logs">
-                <header>
+                <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header>
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" />
+                <field name="synced" column_invisible="True" /> -->
                 <field name="datetime" />
                 <field name="ref_no" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
@@ -540,11 +540,11 @@
         <field name="model">fleet.vehicle.odometer</field>
         <field name="arch" type="xml">
             <tree string="Odometer Logs" editable="top">
-                <header>
+                <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header>
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" />
+                <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
@@ -741,11 +741,11 @@
         <field name="model">fleet.vehicle.petrol</field>
         <field name="arch" type="xml">
             <tree string="Petrol Logs" editable="top">
-                <header>
+                <!-- <header>
                     <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
                 </header>
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
-                <field name="synced" column_invisible="True" />
+                <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="petrol" />

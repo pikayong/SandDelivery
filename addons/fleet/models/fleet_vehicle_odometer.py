@@ -49,8 +49,7 @@ class FleetVehicleOdometer(models.Model):
 
     def quick_sync(self):
         
-        self.env['api_controller.api_controller'].quick_sync()
-        return True
+        return self.env['api_controller.api_controller'].quick_sync()
     
     
     def write(self, vals):
