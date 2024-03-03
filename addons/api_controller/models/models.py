@@ -26,7 +26,7 @@ class api_controller(models.Model):
 
         parameter = {
             "db": "sddb",
-            "login": "techadmin",
+            "login": "clientadmin",
             "password": "123asdASD!@#",    
         }
 
@@ -35,7 +35,7 @@ class api_controller(models.Model):
         _logger.info(data)
 
         headers = {'Content-type': 'application/json'}      
-        AUTH_URL = "http://3.26.69.148:8069/web/session/authenticate/"
+        AUTH_URL = "https://cefreight.com.my/web/session/authenticate/"
         data = {
                 "jsonrpc": "2.0",
                 "params": {
@@ -62,18 +62,18 @@ class api_controller(models.Model):
         _logger.info(res)
         _logger.info(res.cookies["session_id"])
         session_id = res.cookies["session_id"]
-        base_url = "3.26.69.148:8069/api_controller/api_controller/sync_data" # your api 
+        base_url = "cefreight.com.my/api_controller/api_controller/sync_data" # your api 
         json_headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             }
         cookies = {
-            'login': "techadmin", 
+            'login': "clientadmin", 
             'password': '123asdASD!@#',
             'session_id':session_id
             }
         try:
-            response = requests.post("http://{}".format(base_url), data = json.dumps(data, default=str), headers=json_headers, cookies=cookies)
+            response = requests.post("https://{}".format(base_url), data = json.dumps(data, default=str), headers=json_headers, cookies=cookies)
         except requests.exceptions.RequestException as e: 
             return {
                 'type': 'ir.actions.client',
