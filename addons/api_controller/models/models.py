@@ -166,9 +166,9 @@ class api_controller(models.Model):
                     'fadeout': 'slow',
                 },
             }
-        
-        self.SyncedTrip([] if len(data.get('faulty_trips')) == 0 else list(map(lambda x: x.get('id'), data.get('faulty_trips'))))
         _logger = logging.getLogger(__name__)
+
+        self.SyncedTrip([] if len(data.get('faulty_trips')) == 0 else list(map(lambda x: x.get('id'), data.get('faulty_trips'))))
         for item in data.get('result'):
             _logger.info('updating ' + item.get('name'))
             masterData = list(filter(lambda x: x.get('name') == item.get('name'), self.masterDataList()))
@@ -179,9 +179,20 @@ class api_controller(models.Model):
                 recordsData = item.get('data')
                 _logger.info('recordsData ')
                 _logger.info(recordsData)
+
+                item_ids = list(map(lambda x: x.get('id'), recordsData))
+                _logger.info('item_ids')
+                _logger.info(item_ids)
+                _logger.info('not in item_ids')
+                _logger.info(env.search([('ex_id', 'not in', item_ids)]))
+                itemsToBeArchieved = env.search([('ex_id', 'not in', item_ids), ('create_uid', '!=', 1), ('create_uid', '!=', False)])
+                for itemTBA in itemsToBeArchieved:
+                    if 'active' in itemTBA:
+                        itemTBA.write({'active': False})
+
                 for rawrecordData in recordsData:
                     recordData = self.getObjectForCRUD(rawrecordData, item.get('name'), False)
-                    existingRecord = env.search([('name', '=', recordData.get('name'))])
+                    existingRecord = env.search([('ex_id', '=', recordData.get('id'))])
                     _logger.info('existingRecord ')
                     _logger.info(existingRecord)
                     if existingRecord:
@@ -194,9 +205,9 @@ class api_controller(models.Model):
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': ('Synchronize Successfully'),
-                'message': 'You have successfully synchronized with the cloud',
-                'type':'success',  #types: success,warning,danger,info
+                'title': ('Synchronize Successfully') if len(data.get('faulty_trips')) == 0 else ('Partially Synchronized'),
+                'message': 'You have successfully synchronized with the cloud' if len(data.get('faulty_trips')) == 0 else 'There are some mismatch data within the record, please check the unsynced record\'s details',
+                'type':'success' if len(data.get('faulty_trips')) == 0 else 'danger',  #types: success,warning,danger,info
                 'sticky': False,  #True/False will display for few seconds if false
                 'fadeout': 'slow',
                 'next': {
@@ -476,6 +487,7 @@ class api_controller(models.Model):
                 'price': raw_data.get('price'),
                 'bucket': raw_data.get('bucket'),
                 'weight': raw_data.get('weight'),
+                'active': raw_data.get('active'),
             }
         # if obj_name == 'odometers':
         #     return {
