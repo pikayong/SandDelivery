@@ -166,9 +166,10 @@ class api_controller(models.Model):
                     'fadeout': 'slow',
                 },
             }
-        self.Synced()
+        
+        self.SyncedTrip([] if len(data.get('faulty_trips')) == 0 else list(map(lambda x: x.get('id'), data.get('faulty_trips'))))
         _logger = logging.getLogger(__name__)
-        for item in data:
+        for item in data.get('result'):
             _logger.info('updating ' + item.get('name'))
             masterData = list(filter(lambda x: x.get('name') == item.get('name'), self.masterDataList()))
             _logger.info('masterData')
@@ -220,8 +221,8 @@ class api_controller(models.Model):
                     continue
         return data
     
-    def Synced(self):
-        unsyncedData = http.request.env['fleet.vehicle.trip'].search([('synced', '!=', 1)])
+    def SyncedTrip(self, ignored_id):
+        unsyncedData = http.request.env['fleet.vehicle.trip'].search([('synced', '!=', 1), ('id', 'not in', ignored_id)])
         for record in unsyncedData:
             record.write({'synced': 1})
 

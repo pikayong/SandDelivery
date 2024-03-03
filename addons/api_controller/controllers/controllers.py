@@ -46,14 +46,18 @@ class ApiController(http.Controller):
         # get trips data
         data_trips = data.get('trips')
 
+        faulty_trips = []
         if len(data_trips) > 0: 
             for trip in data_trips:
                 trip['synced'] = 1
-                existingTrip = http.request.env['fleet.vehicle.trip'].search([('name', '=', trip.get('name'))])
-                if existingTrip:
-                    existingTrip.write(trip)
+                if http.request.env['fleet.vehicle'].search([('id', '=', trip.get('vehicle_id'))]) and http.request.env['res.partner'].search([('id', '=', trip.get('driver_id'))]) and http.request.env['fleet.vehicle.trip.master'].search([('id', '=', trip.get('trip_id'))]):
+                    existingTrip = http.request.env['fleet.vehicle.trip'].search([('name', '=', trip.get('name'))])
+                    if existingTrip:
+                        existingTrip.write(trip)
+                    else:
+                        newTrips = http.request.env['fleet.vehicle.trip'].sudo().create(trip)
                 else:
-                    newTrips = http.request.env['fleet.vehicle.trip'].sudo().create(trip)
+                    faulty_trips.append(trip)
 
         masterDataList = http.request.env['api_controller.api_controller'].masterDataList()
 
@@ -63,7 +67,10 @@ class ApiController(http.Controller):
 
         _logger.info(masterDataList)
         
-        return self.mapValueToProcessable(masterDataList) 
+        return {
+            'result': self.mapValueToProcessable(masterDataList),
+            'faulty_trips': faulty_trips
+        }
         
     def masterDataList(self):
         return [
