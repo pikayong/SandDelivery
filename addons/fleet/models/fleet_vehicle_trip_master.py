@@ -17,6 +17,7 @@ class FleetVehicleTripMaster(models.Model):
     price = fields.Float('Unit Price(MYR)', required=True)
     bucket = fields.Integer('Ton/bucket', required=True)
     weight = fields.Integer('Default Weight (ton)', required=True)
+    active = fields.Boolean(default=True)
 
 
     def create(self, vals):
