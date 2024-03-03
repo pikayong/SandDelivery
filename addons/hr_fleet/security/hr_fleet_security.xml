@@ -24,9 +24,9 @@
             <field name="domain_force">['|', ('vehicle_id.driver_id','=',user.partner_id.id),
                 ('vehicle_id.driver_employee_id.user_id','=',user.id)]</field>
         </record>
-        <record id="fleet.fleet_rule_vehicle_visibility_user" model="ir.rule">
+        <!-- <record id="fleet.fleet_rule_vehicle_visibility_user" model="ir.rule">
             <field name="domain_force">['|', ('driver_id','=',user.partner_id.id),
                 ('driver_employee_id.user_id','=',user.id)]</field>
-        </record>
+        </record> -->
     </data>
 </odoo>
