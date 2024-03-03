@@ -191,6 +191,7 @@ class Partner(models.Model):
                 values['type'] = None
         return values
 
+    ex_id = fields.Integer(store=True)
     name = fields.Char(index=True, default_export_compatible=True)
     complete_name = fields.Char(compute='_compute_complete_name', store=True, index=True)
     date = fields.Date(index=True)
@@ -745,6 +746,8 @@ class Partner(models.Model):
             return partners
 
         for partner, vals in zip(partners, vals_list):
+            if partner.ex_id == 0: 
+                partner.sudo().write({'ex_id': partner.id})
             partner._fields_sync(vals)
             # Lang: propagate from parent if no value was given
             if 'lang' not in vals and partner.parent_id:
