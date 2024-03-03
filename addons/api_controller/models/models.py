@@ -88,7 +88,6 @@ class api_controller(models.Model):
             }
         _logger.info(response.status_code)
         _logger.info(response.json().get('result'))
-        self.Synced()
         return self.updateMasterData(response.json().get('result'))
         
     
@@ -167,6 +166,7 @@ class api_controller(models.Model):
                     'fadeout': 'slow',
                 },
             }
+        self.Synced()
         _logger = logging.getLogger(__name__)
         for item in data:
             _logger.info('updating ' + item.get('name'))
