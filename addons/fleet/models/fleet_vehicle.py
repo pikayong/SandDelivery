@@ -37,6 +37,7 @@ class FleetVehicle(models.Model):
         return defaultState if defaultState and defaultState.id else False
 
 
+    ex_id = fields.Integer(store=True)
     name = fields.Char(compute="_compute_vehicle_name", store=True)
     description = fields.Html("Vehicle Description")
     active = fields.Boolean('Active', default=True, tracking=True)
@@ -319,6 +320,8 @@ class FleetVehicle(models.Model):
         vehicles = super().create(vals_list)
         self._logger.info(vehicles)
         for vehicle, vals, ptc_value in zip(vehicles, vals_list, ptc_values):
+            if vehicle.ex_id == 0: 
+                vehicle.sudo().write({'ex_id': vehicle.id})
             if ptc_value:
                 vehicle.sudo().write(ptc_value)
             if 'driver_id' in vals and vals['driver_id']:

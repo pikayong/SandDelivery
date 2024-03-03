@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import logging
 from odoo import _, api, fields, models
 from odoo.osv import expression
 
@@ -23,6 +24,7 @@ class FleetVehicleModel(models.Model):
     _description = 'Model of a vehicle'
     _order = 'name asc'
 
+    ex_id = fields.Integer(store=True)
     name = fields.Char('Model name', required=True)
     brand_id = fields.Many2one('fleet.vehicle.model.brand', 'Brand', required=True)
     category_id = fields.Many2one('fleet.vehicle.model.category', 'Category')
@@ -97,6 +99,16 @@ class FleetVehicleModel(models.Model):
         }
 
         return view
+
+
+    def create(self, vals):
+        _logger = logging.getLogger(__name__)
+        result = super().create(vals)
+        _logger.info('ex_id')
+        _logger.info(result.ex_id)
+        if result.ex_id == 0: 
+            result.sudo().write({'ex_id': result.id})
+        return result
     
     def write(self, vals):
         if self.synced == 1:

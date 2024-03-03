@@ -9,6 +9,7 @@ class FleetVehicleModelBrand(models.Model):
     _description = 'Brand of the vehicle'
     _order = 'name asc'
 
+    ex_id = fields.Integer(store=True)
     name = fields.Char('Name', required=True)
     active = fields.Boolean(default=True)
     image_128 = fields.Image("Logo", max_width=128, max_height=128)
@@ -37,3 +38,9 @@ class FleetVehicleModelBrand(models.Model):
         }
 
         return view
+
+    def create(self, vals):
+        result = super().create(vals)
+        if result.ex_id == 0: 
+            result.sudo().write({'ex_id': result.id})
+        return result
