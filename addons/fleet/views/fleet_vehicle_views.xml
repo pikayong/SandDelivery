@@ -274,8 +274,8 @@
                 <separator/>
                 <filter string="Need Action" name="alert_true" domain="['|', ('contract_renewal_due_soon', '=', True), ('contract_renewal_overdue', '=', True)]"/>
                 <separator/>
-                <filter string="Archived" name="inactive" domain="[('active', '=', False)]" groups="fleet_group_manager"/>
-                <separator groups="fleet_group_manager"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]" groups="fleet.fleet_group_manager"/>
+                <separator groups="fleet.fleet_group_manager"/>
                 <filter invisible="1" string="Late Activities" name="activities_overdue"
                     domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"
                     help="Show all records which has next action date is before today"/>
