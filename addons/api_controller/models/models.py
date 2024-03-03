@@ -56,6 +56,7 @@ class api_controller(models.Model):
                     'message': 'Something went wrong with the connection, please check your Wifi is connecting normally',
                     'type':'error',  #types: success,warning,danger,info
                     'sticky': False,  #True/False will display for few seconds if false
+                    'fadeout': 'slow',
                 },
             }
         _logger.info(res)
@@ -71,27 +72,33 @@ class api_controller(models.Model):
             'password': '123asdASD!@#',
             'session_id':session_id
             }
-        response = requests.post("http://{}".format(base_url), data = json.dumps(data, default=str), headers=json_headers, cookies=cookies)
+        try:
+            response = requests.post("http://{}".format(base_url), data = json.dumps(data, default=str), headers=json_headers, cookies=cookies)
+        except requests.exceptions.RequestException as e: 
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': ('Internet connection issue. Please check your connection. '),
+                    'message': 'Something went wrong with the connection, please check your Wifi is connecting normally',
+                    'type':'error',  #types: success,warning,danger,info
+                    'sticky': False,  #True/False will display for few seconds if false
+                    'fadeout': 'slow',
+                },
+            }
         _logger.info(response.status_code)
         _logger.info(response.json().get('result'))
-        # self.Synced()
-        self.updateMasterData(response.json().get('result'))
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': ('Synchronize Successfully'),
-                'message': 'You have successfully synchronized with the cloud',
-                'type':'success',  #types: success,warning,danger,info
-                'sticky': False,  #True/False will display for few seconds if false
-            },
-        }
+        self.Synced()
+        return self.updateMasterData(response.json().get('result'))
+        
     
     def getData(self):
         _logger = logging.getLogger(__name__)
         indexes = self.getIndexes_getList()
-        for index in indexes:
-            index['data'] = self.searchReadDataProcessing(index.get('data'))
+
+        indexes = self.mapValueToProcessable(indexes)
+        # for index in indexes:
+        #     index['data'] = self.mapValueToProcessable(index.get('data'))
             # for vehicle in index.get('data'):
             #     for x in vehicle:
             #         try:
@@ -124,7 +131,36 @@ class api_controller(models.Model):
         _logger.info(result)
         return result
     
+    def mapValueToProcessable(self, masterDataList):
+        for masterData in masterDataList:
+            for data in masterData.get('data'):
+                for x in data:
+                    try:
+                        data[x] = str(data[x], "utf-8")
+                    finally:
+                        if type(data[x]) == tuple:
+                            if len(data[x]) > 0:
+                                data[x] = data[x][0]
+                            else:
+                                data[x] = None
+                        if x == 'synced':
+                            data[x] = True
+                        continue
+        return masterDataList
+    
     def updateMasterData(self, data):
+        if not data:
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': ('Opps.. Seems like something went wrong. '),
+                    'message': 'Please contact administrator to fix the problem',
+                    'type':'error',  #types: success,warning,danger,info
+                    'sticky': False,  #True/False will display for few seconds if false
+                    'fadeout': 'slow',
+                },
+            }
         _logger = logging.getLogger(__name__)
         for item in data:
             _logger.info('updating ' + item.get('name'))
@@ -147,6 +183,20 @@ class api_controller(models.Model):
                         newRecord = env.sudo().create(recordData)
                     if not item.get('create_multi'):
                         self.env.cr.commit()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': ('Synchronize Successfully'),
+                'message': 'You have successfully synchronized with the cloud',
+                'type':'success',  #types: success,warning,danger,info
+                'sticky': False,  #True/False will display for few seconds if false
+                'fadeout': 'slow',
+                'next': {
+                    'type': 'ir.actions.act_window_close',
+                }
+            },
+        }
     
     def searchReadDataProcessing(self, data):
         for vehicle in data:
@@ -165,7 +215,7 @@ class api_controller(models.Model):
         return data
     
     def Synced(self):
-        unsyncedData = http.request.env['fleet.vehicle.odometer'].search([('synced', '=', 0)])
+        unsyncedData = http.request.env['fleet.vehicle.trip'].search([('synced', '!=', 1)])
         for record in unsyncedData:
             record.write({'synced': 1})
 
@@ -333,8 +383,6 @@ class api_controller(models.Model):
                 'co2': raw_data.get('co2'),
                 'co2_standard': raw_data.get('co2_standard'),
                 'description': raw_data.get('description'),
-                'driver_employee_id': raw_data.get('driver_employee_id'),
-                'future_driver_employee_id': raw_data.get('future_driver_employee_id'),
             }
         if obj_name == 'fleet.vehicle.model.brand':
             return {
