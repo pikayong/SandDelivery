@@ -60,10 +60,12 @@ class ApiController(http.Controller):
                     faulty_trips.append(trip)
 
         masterDataList = http.request.env['api_controller.api_controller'].masterDataList()
-        
+
         _logger.info(masterDataList)
 
         for masterData in masterDataList:
+            _logger.info(masterData.get('env').search_read([]))
+            _logger.info(masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)]))
             masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)])
             del masterData['env']
             
