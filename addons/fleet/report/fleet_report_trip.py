@@ -17,7 +17,7 @@ class FleetReportTrip(models.Model):
     vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', readonly=True)
     driver_id = fields.Many2one('res.partner', 'Driver', readonly=True)
     trip_id = fields.Many2one('fleet.vehicle.trip.master', 'Trip', readonly=True)
-    loading_weight = fields.Float('Weight (tons)', group_operator="max", readonly=True)
+    loading_weight = fields.Float('Weight (tons)', group_operator="sum", readonly=True)
     distance = fields.Float('Distance (km)', group_operator="sum", readonly=True)
     total = fields.Float('Total (RM)', group_operator="sum", readonly=True)
 

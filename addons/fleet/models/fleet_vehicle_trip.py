@@ -18,7 +18,7 @@ class FleetVehicleTrip(models.Model):
     trip_id = fields.Many2one('fleet.vehicle.trip.master', 'Trip', required=True, domain="[('active', '=', True)]")
     distance = fields.Integer('Distance (km)', compute='_compute_trip_distance', store=True, required=True, readonly=False)
     price = fields.Float('Unit Price (MYR)', compute='_compute_trip_price', store=True, required=True, readonly=False)
-    bucket = fields.Integer('Ton/bucket', compute='_compute_trip_bucket', store=True, required=True, readonly=False)
+    bucket = fields.Float('Ton/bucket', compute='_compute_trip_bucket', store=True, required=True, readonly=False)
     bucket_amount = fields.Integer('Bucket', store=True)
     loading_weight = fields.Float('Weight (tons)', compute='_compute_loading_weight', store=True, readonly=False)
     total = fields.Float('Total (RM)', compute='_compute_total', store=True, readonly=True)

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+6# -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from psycopg2 import sql
 
@@ -16,8 +16,9 @@ class FleetReportOdometer(models.Model):
     date = fields.Date('Date', readonly=True)
     # value = fields.Float('Odometer (km)', group_operator="max", readonly=True)
     distance = fields.Float('Distance (km)', group_operator="sum", readonly=True)
-    vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', readonly=True)
+    vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle (Detail)', readonly=True)
     driver_id = fields.Many2one('res.partner', 'Driver', readonly=True)
+    license_plate = fields.Char('Vehicle', readonly=True)
 
     def init(self):
         query = """
@@ -27,7 +28,8 @@ select
 	date,
 	case when previous_value is null then value - initial_odometer else value - previous_value end as distance,
 	vehicle_id,
-	driver_id
+	driver_id,
+    license_plate
 from
 (select
 	o.id,
@@ -37,7 +39,8 @@ from
 	LAG(o.value) OVER (PARTITION BY o.vehicle_id ORDER BY o.date) AS previous_value,
 	o.vehicle_id,
 	o.driver_id,
-	v.initial_odometer
+	v.initial_odometer,
+    v.license_plate
 from
 	public.fleet_vehicle_odometer o
 left join 

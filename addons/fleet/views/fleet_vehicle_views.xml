@@ -450,7 +450,7 @@
         <field name="arch" type="xml">
             <tree string="Trip Logs">
                 <!-- <header>
-                    <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
+                    <button display="always" name="quick_sync" type="object" string="Synchronize"/>
                 </header>
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
@@ -541,7 +541,7 @@
         <field name="arch" type="xml">
             <tree string="Odometer Logs" editable="top">
                 <!-- <header>
-                    <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
+                    <button display="always" name="quick_sync" type="object" string="Synchronize"/>
                 </header>
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
@@ -742,7 +742,7 @@
         <field name="arch" type="xml">
             <tree string="Petrol Logs" editable="top">
                 <!-- <header>
-                    <button display="always" name="quick_sync" type="object" string="Upload To Cloud"/>
+                    <button display="always" name="quick_sync" type="object" string="Synchronize"/>
                 </header>
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
