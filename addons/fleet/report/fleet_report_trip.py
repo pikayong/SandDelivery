@@ -20,21 +20,25 @@ class FleetReportTrip(models.Model):
     loading_weight = fields.Float('Weight (tons)', group_operator="sum", readonly=True)
     distance = fields.Float('Distance (km)', group_operator="sum", readonly=True)
     total = fields.Float('Total (RM)', group_operator="sum", readonly=True)
+    license_plate = fields.Char('Vehicle', readonly=True)
 
     def init(self):
         query = """
 select
-	id,
-	name,
-	datetime,
-	vehicle_id,
-	driver_id,
-	trip_id,
-	loading_weight,
-	distance,
-	total
+	t.id,
+	t.name,
+	t.datetime,
+	t.vehicle_id,
+	t.driver_id,
+	t.trip_id,
+	t.loading_weight,
+	t.distance,
+	t.total,
+    v.license_plate
 from
-	public.fleet_vehicle_trip
+	public.fleet_vehicle_trip t
+inner join
+    public.fleet_vehicle v on t.vehicle_id = v.id
 """
         tools.drop_view_if_exists(self.env.cr, self._table)
         self.env.cr.execute(
