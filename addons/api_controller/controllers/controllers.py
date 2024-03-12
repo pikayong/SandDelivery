@@ -64,8 +64,9 @@ class ApiController(http.Controller):
         _logger.info(masterDataList)
 
         for masterData in masterDataList:
-            _logger.info(masterData.get('env').search_read([]))
-            _logger.info(masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)]))
+            if masterData.get('name') == 'fleet.vehicle':
+                _logger.info(masterData.get('env').search_read([]))
+                _logger.info(masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)]))
             masterData['data'] = masterData.get('env').search_read([('create_uid', '!=', 1), ('create_uid', '!=', False)])
             del masterData['env']
             
