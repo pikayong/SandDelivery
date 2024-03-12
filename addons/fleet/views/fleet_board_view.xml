@@ -117,9 +117,13 @@
             <search string="Vehicle Petrol Analysis">
                 <field name="name" filter_domain="[('name', 'ilike', self)]"/>
                 <field name="driver_id" filter_domain="[('driver_id', 'ilike', self)]"/>
+                <filter string="Current Month" name="current_month" domain="[('date', '&lt;', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="Previous Month" name="prev_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('date','&lt;',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last 6 Months" name="prev_six_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=5)).strftime('%%Y-%%m-01')),('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last 12 Months" name="prev_twelve_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=11)).strftime('%%Y-%%m-01')),('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
                 <separator/>
                 <group expand="1" string="Group By">
-                    <filter string="Vehicle" name="vehicle" context="{'group_by':'vehicle_id'}"/>
+                    <filter string="Vehicle" name="vehicle" context="{'group_by':'license_plate'}"/>
                     <filter string="Driver" name="driver" context="{'group_by':'driver_id'}"/>
                     <filter string="Date Interval" name="date" context="{'group_by': 'date'}"/>
                 </group>
@@ -133,7 +137,7 @@
         <field name="arch" type="xml">
             <pivot sample="1">
                 <field name="date" type="col" interval="month" />
-                <field name="vehicle_id" type="row" />
+                <field name="license_plate" type="row" />
                 <field name="petrol_rate" type="measure" />
             </pivot>
         </field>
@@ -145,7 +149,7 @@
         <field name="arch" type="xml">
             <graph string="Fleet Petrols Analysis" sample="1" stacked="0">
                 <field name="date" interval="month"/>
-                <field name="vehicle_id"/>
+                <field name="license_plate"/>
                 <field name="petrol_rate" type="measure"/>
             </graph>
         </field>
@@ -156,14 +160,14 @@
         <field name="model">fleet.vehicle.petrol.report</field>
         <field name="arch" type="xml">
             <tree string="Fleet Petrols Analysis" create="0">
-                <field name="name"/>
-                <field name="vehicle_id" optional="show"/>
+                <field name="license_plate" optional="show"/>
                 <field name="driver_id" optional="hide"/>
                 <field name="date" optional="show"/>
                 <field name="petrol" optional="show" sum="Sum of Petrol Cost"/>
                 <field name="odometer_distance" optional="show"/>
                 <field name="trip_distance" optional="show"/>
                 <field name="petrol_rate" optional="show"/>
+                <field name="petrol_rate_trip" optional="show"/>
             </tree>
         </field>
     </record>
@@ -176,7 +180,7 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="vehicle_id"/>
+                            <field name="license_plate"/>
                             <field name="driver_id"/>
                         </group>
                         <group>
@@ -197,7 +201,7 @@
         <field name="res_model">fleet.vehicle.petrol.report</field>
         <field name="view_mode">graph,pivot</field>
         <field name="view_id"></field>
-        <field name="context" eval="{'search_default_filter_date_start': 1}"/>
+        <field name="context" eval="{'search_default_current_month': 1}"/>
         <field name="search_view_id" ref="fleet.fleet_petrols_report_view_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
@@ -223,6 +227,10 @@
             <search string="Vehicle Petrol Analysis">
                 <field name="name" filter_domain="[('name', 'ilike', self)]"/>
                 <field name="driver_id" filter_domain="[('driver_id', 'ilike', self)]"/>
+                <filter string="Current Month" name="current_month" domain="[('date', '&lt;', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="Previous Month" name="prev_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('date','&lt;',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last 6 Months" name="prev_six_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=5)).strftime('%%Y-%%m-01')),('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last 12 Months" name="prev_twelve_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=11)).strftime('%%Y-%%m-01')),('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Vehicle" name="vehicle" context="{'group_by':'vehicle_id'}"/>
@@ -251,7 +259,7 @@
         <field name="arch" type="xml">
             <graph string="Fleet Odometers Analysis" sample="1" stacked="0">
                 <field name="date" interval="month"/>
-                <field name="vehicle_id"/>
+                <field name="license_plate"/>
                 <field name="distance" type="measure"/>
             </graph>
         </field>
@@ -263,7 +271,7 @@
         <field name="arch" type="xml">
             <tree string="Fleet Odometers Analysis" create="0">
                 <field name="name"/>
-                <field name="vehicle_id" optional="show"/>
+                <field name="license_plate" optional="show"/>
                 <field name="driver_id" optional="hide"/>
                 <field name="date" optional="show"/>
                 <field name="distance" optional="show" sum="Sum of Distance"/>
@@ -279,7 +287,7 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="vehicle_id"/>
+                            <field name="license_plate"/>
                             <field name="driver_id"/>
                         </group>
                         <group>
@@ -297,7 +305,7 @@
         <field name="res_model">fleet.vehicle.odometer.report</field>
         <field name="view_mode">graph,pivot</field>
         <field name="view_id"></field>
-        <field name="context" eval="{'search_default_filter_date_start': 1}"/>
+        <field name="context" eval="{'search_default_current_month': 1}"/>
         <field name="search_view_id" ref="fleet.fleet_odometers_report_view_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
@@ -323,6 +331,10 @@
             <search string="Vehicle Petrol Analysis">
                 <field name="name" filter_domain="[('name', 'ilike', self)]"/>
                 <field name="driver_id" filter_domain="[('driver_id', 'ilike', self)]"/>
+                <filter string="Current Month" name="current_month" domain="[('date', '&lt;', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="Previous Month" name="prev_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('date','&lt;',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last 6 Months" name="prev_six_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=5)).strftime('%%Y-%%m-01')),('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last 12 Months" name="prev_twelve_month" domain="[('date','&gt;=',(context_today()-relativedelta(months=11)).strftime('%%Y-%%m-01')),('date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Vehicle" name="vehicle" context="{'group_by':'vehicle_id'}"/>
@@ -402,7 +414,7 @@
         <field name="res_model">fleet.vehicle.trip.report</field>
         <field name="view_mode">graph,pivot</field>
         <field name="view_id"></field>
-        <field name="context" eval="{'search_default_filter_date_start': 1}"/>
+        <field name="context" eval="{'search_default_current_month': 1}"/>
         <field name="search_view_id" ref="fleet.fleet_trips_report_view_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_empty_folder">
