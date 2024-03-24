@@ -456,6 +456,7 @@
                 <field name="synced" column_invisible="True" /> -->
                 <field name="datetime" />
                 <field name="ref_no" />
+                <field name="license_plate"/>
                 <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="trip_id"/>
