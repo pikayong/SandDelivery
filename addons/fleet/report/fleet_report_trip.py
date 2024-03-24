@@ -27,7 +27,7 @@ class FleetReportTrip(models.Model):
 select
 	t.id,
 	t.name,
-	t.datetime at time zone 'utc' at time zone 'asia/kuala_lumpur',
+	t.datetime at time zone 'utc' at time zone 'asia/kuala_lumpur' as datetime,
 	t.vehicle_id,
 	t.driver_id,
 	t.trip_id,
