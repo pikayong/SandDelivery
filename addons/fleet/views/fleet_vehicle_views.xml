@@ -457,7 +457,7 @@
                 <field name="datetime" />
                 <field name="ref_no" />
                 <field name="license_plate"/>
-                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
+                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar" column_invisible="True"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="trip_id"/>
                 <field name="distance" />
@@ -475,12 +475,12 @@
         <field name="model">fleet.vehicle.trip</field>
         <field name="arch" type="xml">
             <search string="Vehicles trips" >
-                <field name="vehicle_id"/>
+                <field name="license_plate"/>
                 <field name="driver_id"/>
                 <field name="trip_id"/>
                 <field name="datetime"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
+                    <filter name="groupby_vehicle" context="{'group_by': 'license_plate'}" string="Vehicle"/>
                     <filter name="groupby_driver" context="{'group_by': 'driver_id'}" string="Driver"/>
                     <filter name="groupby_date" context="{'group_by': 'datetime'}" string="Date Interval"/>
                 </group>
@@ -547,7 +547,8 @@
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
-                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
+                <field name="license_plate"/>
+                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar" column_invisible="True"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="value"/>
             </tree>
@@ -559,12 +560,12 @@
         <field name="model">fleet.vehicle.odometer</field>
         <field name="arch" type="xml">
             <search string="Vehicles odometers" >
-                <field name="vehicle_id"/>
+                <field name="license_plate"/>
                 <field name="driver_id"/>
                 <field name="value"/>
                 <field name="date"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
+                    <filter name="groupby_vehicle" context="{'group_by': 'license_plate'}" string="Vehicle"/>
                     <filter name="groupby_driver" context="{'group_by': 'driver_id'}" string="Driver"/>
                     <filter name="groupby_date" context="{'group_by': 'date'}" string="Date Interval"/>
                 </group>
@@ -748,7 +749,8 @@
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
-                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
+                <field name="license_plate"/>
+                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar" column_invisible="True"/>
                 <field name="petrol" />
             </tree>
         </field>
@@ -783,11 +785,11 @@
         <field name="model">fleet.vehicle.petrol</field>
         <field name="arch" type="xml">
             <search string="Vehicles petrols" >
-                <field name="vehicle_id"/>
+                <field name="license_plate"/>
                 <field name="petrol"/>
                 <field name="date"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
+                    <filter name="groupby_vehicle" context="{'group_by': 'license_plate'}" string="Vehicle"/>
                     <filter name="groupby_date" context="{'group_by': 'date'}" string="Date Interval"/>
                 </group>
             </search>

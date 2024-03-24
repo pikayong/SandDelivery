@@ -16,6 +16,7 @@ class FleetVehicleOdometer(models.Model):
     date = fields.Date('Date', default=fields.Date.today)
     value = fields.Float('Odometer (km)', group_operator="max")
     vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', required=True, domain="[('active', '=', True)]")
+    license_plate = fields.Char(related='vehicle_id.license_plate', string="Vehicle", readonly=True, store=False)
     # driver_id = fields.Many2one(related="vehicle_id.driver_id", string="Driver", readonly=False)
     driver_id = fields.Many2one('res.partner', compute='_compute_default_driver', store=True, string="Driver", readonly=False, required=True, domain="[('active', '=', True)]")
     synced = fields.Integer('Synced')
