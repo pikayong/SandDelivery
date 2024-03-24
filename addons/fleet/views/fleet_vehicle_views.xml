@@ -480,7 +480,7 @@
                 <field name="trip_id"/>
                 <field name="datetime"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_vehicle" context="{'group_by': 'license_plate'}" string="Vehicle"/>
+                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
                     <filter name="groupby_driver" context="{'group_by': 'driver_id'}" string="Driver"/>
                     <filter name="groupby_date" context="{'group_by': 'datetime'}" string="Date Interval"/>
                 </group>
@@ -565,7 +565,7 @@
                 <field name="value"/>
                 <field name="date"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_vehicle" context="{'group_by': 'license_plate'}" string="Vehicle"/>
+                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
                     <filter name="groupby_driver" context="{'group_by': 'driver_id'}" string="Driver"/>
                     <filter name="groupby_date" context="{'group_by': 'date'}" string="Date Interval"/>
                 </group>
@@ -789,7 +789,7 @@
                 <field name="petrol"/>
                 <field name="date"/>
                 <group expand="1" string="Group By">
-                    <filter name="groupby_vehicle" context="{'group_by': 'license_plate'}" string="Vehicle"/>
+                    <filter name="groupby_vehicle" context="{'group_by': 'vehicle_id'}" string="Vehicle"/>
                     <filter name="groupby_date" context="{'group_by': 'date'}" string="Date Interval"/>
                 </group>
             </search>
