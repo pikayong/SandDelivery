@@ -16,7 +16,7 @@ class FleetVehiclePetrol(models.Model):
     # odometer = fields.Float('Odometer (km)', group_operator="max")
     petrol = fields.Float('Petrol (RM)', group_operator="max")
     vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', required=True, domain="[('active', '=', True)]")
-    license_plate = fields.Char(related='vehicle_id.license_plate', string="Vehicle", readonly=True, store=False)
+    license_plate = fields.Char(related='vehicle_id.license_plate', string="License Plate", readonly=True, store=False)
     # driver_id = fields.Many2one(related="vehicle_id.driver_id", string="Driver", readonly=False)
     # driver_id = fields.Many2one('res.partner', string="Driver", readonly=False, required=True)
     # driver_id = fields.Many2one('res.partner', compute='_compute_default_driver', store=True, string="Driver", readonly=False, required=True)

@@ -547,8 +547,8 @@
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
+                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
                 <field name="license_plate"/>
-                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar" column_invisible="True"/>
                 <field name="driver_id" domain="[('plan_to_change_car', '!=', None)]" widget="many2one_avatar"/>
                 <field name="value"/>
             </tree>
@@ -749,8 +749,8 @@
                 <field name="synced_display" decoration-success="synced == 1" decoration-info="synced == 0" widget="badge"/>
                 <field name="synced" column_invisible="True" /> -->
                 <field name="date" />
-                <field name="license_plate" class="oe_read_only"/>
-                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar" class="oe_edit_only"/>
+                <field name="vehicle_id" domain="[('state_id.visibility', '=', '1')]" widget="many2one_avatar"/>
+                <field name="license_plate"/>
                 <field name="petrol" />
             </tree>
         </field>

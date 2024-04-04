@@ -31,6 +31,10 @@ class FleetVehicleTrip(models.Model):
     synced = fields.Integer('Synced')
     synced_display = fields.Char('Status', compute='_get_sync_display', store=False)
 
+    _sql_constraints = [
+        ('ref_no', 'unique(ref_no)', 'The reference no. has already been used, please insert another reference no.')
+    ]
+
     @api.depends('vehicle_id')
     def _compute_default_driver(self):
         for record in self:
