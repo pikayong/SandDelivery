@@ -14,6 +14,7 @@ class FleetReportTrip(models.Model):
     
     name = fields.Char('Name', readonly=True)
     datetime = fields.Datetime('Date & Time', readonly=True)
+    datetime_processed = fields.Datetime('Date & Time', readonly=True, invisible=True)
     vehicle_id = fields.Many2one('fleet.vehicle', 'Vehicle', readonly=True)
     driver_id = fields.Many2one('res.partner', 'Driver', readonly=True)
     trip_id = fields.Many2one('fleet.vehicle.trip.master', 'Trip', readonly=True)
@@ -28,6 +29,7 @@ select
 	t.id,
 	t.name,
 	t.datetime,
+	t.datetime_processed at time zone 'utc' at time zone 'asia/kuala_lumpur' as datetime_processed,
 	t.vehicle_id,
 	t.driver_id,
 	t.trip_id,
