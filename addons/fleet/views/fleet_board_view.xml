@@ -331,8 +331,8 @@
             <search string="Vehicle Petrol Analysis">
                 <field name="name" filter_domain="[('name', 'ilike', self)]"/>
                 <field name="driver_id" filter_domain="[('driver_id', 'ilike', self)]"/>
-                <filter string="Current Month" name="current_month" domain="[('datetime', '&lt;', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('datetime','&gt;=',context_today().strftime('%%Y-%%m-01'))]"/>
-                <filter string="Previous Month" name="prev_month" domain="[('datetime','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('datetime','&lt;',context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter string="Current Month" name="current_month" domain="[('datetime', '&lt;', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('datetime','&gt;=',(context_today().replace(day=1)-relativedelta(hours=8)).strftime('%%Y-%%m-%%d %%H:%%M:%%S'))]"/>
+                <filter string="Previous Month" name="prev_month" domain="[('datetime','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('datetime','&lt;',time.strftime('%%Y-%%m-01'))]"/>
                 <filter string="Last 6 Months" name="prev_six_month" domain="[('datetime','&gt;=',(context_today()-relativedelta(months=5)).strftime('%%Y-%%m-01')),('datetime','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
                 <filter string="Last 12 Months" name="prev_twelve_month" domain="[('datetime','&gt;=',(context_today()-relativedelta(months=11)).strftime('%%Y-%%m-01')),('datetime','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
                 <separator/>
