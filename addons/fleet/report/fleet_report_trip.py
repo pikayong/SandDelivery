@@ -29,7 +29,7 @@ select
 	t.id,
 	t.name,
 	t.datetime,
-	t.datetime_processed at time zone 'utc' at time zone 'asia/kuala_lumpur' as datetime_processed,
+	t.datetime at time zone 'utc' at time zone 'asia/kuala_lumpur' as datetime_processed,
 	t.vehicle_id,
 	t.driver_id,
 	t.trip_id,
